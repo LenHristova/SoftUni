@@ -11,24 +11,29 @@ class Program
             .ToArray();
 
         int rotationsCount = int.Parse(Console.ReadLine());
+        int[] sum = Sum(numbers, rotationsCount);
+        Console.WriteLine(string.Join(" ", sum));
+    }
 
+    private static int[] Sum(int[] numbers, int rotationsCount)
+    {
         int[] sum = new int[numbers.Length];
         int allCalculations = rotationsCount * numbers.Length;
-
 
         for (int i = 0; i < allCalculations; i++)
         {
             if (i % sum.Length == 0)
             {
-                RotateList(numbers);
+                Rotate(numbers);
             }
 
             sum[i % sum.Length] += numbers[i % numbers.Length];
         }
-        Console.WriteLine(string.Join(" ", sum));
+
+        return sum;
     }
 
-    static int[] RotateList(int[] arr)
+    static void Rotate(int[] arr)
     {
         int lastElement = arr[arr.Length - 1];
         for (int i = arr.Length - 1; i > 0; i--)
@@ -36,7 +41,5 @@ class Program
             arr[i] = arr[i - 1];
         }
         arr[0] = lastElement;
-        return arr;
     }
 }
-
