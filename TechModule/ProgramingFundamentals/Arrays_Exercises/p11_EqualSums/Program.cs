@@ -1,33 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace p11_EqualSums
+class Program
 {
-    class Program
+    static void Main()
     {
-        static void Main(string[] args)
-        {
-            int[] nums = Console.ReadLine()
-                .Split(' ')
-                .Select(int.Parse)
-                .ToArray();
+        int[] nums = Console.ReadLine()
+            .Split(' ')
+            .Select(int.Parse)
+            .ToArray();
 
-            PRint(nums);
-        }
+        Console.WriteLine(GetElementIfExist(nums));
+    }
 
-        private static void PRint(int[] nums)
+    //search element that the sum of the elements on its left is equal to the sum of the elements on its right
+    static string GetElementIfExist(int[] nums)
+    {
+        for (int pos = 0; pos < nums.Length; pos++)
         {
-            for (int i = 0; i < nums.Length; i++)
+            if (nums.Take(pos).Sum() == nums.Skip(pos + 1).Sum())
             {
-                if (nums.Take(i).Sum() == nums.Skip(i + 1).Sum())
-                {
-                    Console.WriteLine(i);
-                    break;
-                }
+                return pos.ToString();
             }
         }
+        return "no";
     }
 }
