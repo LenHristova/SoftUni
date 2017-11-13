@@ -1,0 +1,31 @@
+form{
+    border: 2px solid gray;
+    width: 175px;
+    padding: 30px;
+    border-radius: 4px;
+    background-color: rgba(128, 128, 128, 0.15);
+    margin: 15px;
+}
+
+form input[type="button"]{
+    background-color: #8aaaee;
+    color: white;
+    height: 30px;
+    border-radius: 5px;
+}
+
+form input[type="button"]:hover {
+    cursor: pointer;
+}
+
+.label{
+    padding: 10px 0 10px 0;
+}
+.invalid{
+    color: red;
+}
+
+.valid{
+    color: green;
+    font-size: larger;
+}
