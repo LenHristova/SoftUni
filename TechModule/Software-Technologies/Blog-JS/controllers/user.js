@@ -1,4 +1,5 @@
 const User = require('mongoose').model('User');
+const Article = require('mongoose').model('Article');
 const encryption = require('./../utilities/encryption');
 
 module.exports = {
@@ -6,7 +7,7 @@ module.exports = {
         res.render('user/register');
     },
 
-    registerPost:(req, res) => {
+    registerPost: (req, res) => {
         let registerArgs = req.body;
 
         User.findOne({email: registerArgs.email}).then(user => {
@@ -53,7 +54,7 @@ module.exports = {
     loginPost: (req, res) => {
         let loginArgs = req.body;
         User.findOne({email: loginArgs.email}).then(user => {
-            if (!user ||!user.authenticate(loginArgs.password)) {
+            if (!user || !user.authenticate(loginArgs.password)) {
                 let errorMsg = 'Either username or password is invalid!';
                 loginArgs.error = errorMsg;
                 res.render('user/login', loginArgs);
@@ -75,5 +76,15 @@ module.exports = {
     logout: (req, res) => {
         req.logOut();
         res.redirect('/');
+    },
+
+    details: (req, res) => {
+        let id = req.params.id;
+
+        Article.find({author: id})
+            .populate('author')
+            .then(articles => {
+                res.render('user/details', {articles: articles, author: articles[0].author});
+            });
     }
 };
