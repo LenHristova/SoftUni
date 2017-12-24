@@ -1,0 +1,30 @@
+{% extends "base.html.twig" %}
+
+{% block main %}
+    <div id="create-wrapper">
+        {% if errorMsg is defined %}
+            <h2 style="text-align: center">{{ errorMsg }}</h2>
+        {% endif %}
+        {% if errorMsg is null %}
+            <h2 style="text-align: center">Create Task</h2>
+        {% endif %}
+        <section class="create">
+            <article>
+                <form action="{{ path('create') }}" method="POST">
+                    <div class="row">
+                        <label for="task">Task:</label>
+                        <input type="text" id="task" name="task[title]">
+                    </div>
+                    <div class="row">
+                        <label for="comments">Comments:</label>
+                        <textarea id="comments" name="task[comments]"></textarea>
+                    </div>
+
+                    {{ form_row(form._token) }}
+
+                    <button type="submit">Create</button>
+                </form>
+            </article>
+        </section>
+    </div>
+{% endblock %}
