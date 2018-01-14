@@ -6,26 +6,20 @@ public class LinkedList<T> : IEnumerable<T>
 {
     public class Node
     {
-        public Node(T value)
-        {
-            Value = value;
-        }
-
         public T Value { get; set; }
 
         public Node Next { get; set; }
 
-        public Node Prev { get; set; }
+        public Node(T value)
+        {
+            Value = value;
+        }
     }
 
     private Node _head;
     private Node _tail;
 
     public int Count { get; private set; }
-
-    public LinkedList()
-    {
-    }
 
     public void AddFirst(T item)
     {
@@ -39,7 +33,6 @@ public class LinkedList<T> : IEnumerable<T>
         else
         {
             newNode.Next = _head;
-            this._head.Prev = newNode;
             this._head = newNode;
         }
 
@@ -58,7 +51,6 @@ public class LinkedList<T> : IEnumerable<T>
         else
         {
             this._tail.Next = newNode;
-            newNode.Prev = this._tail;
             this._tail = newNode;
         }
 
@@ -72,16 +64,16 @@ public class LinkedList<T> : IEnumerable<T>
             throw new InvalidOperationException();
         }
 
-        var element = this._head.Value;
+        var element = _head.Value;
 
         if (this.Count == 1)
         {
-            this._tail = this._head = null;
+            this._tail = null;
+            this._head = null;
         }
         else
         {
-            this._head = this._head.Next;
-            this._head.Prev = null;
+            this._head = _head.Next;
         }
 
         this.Count--;
@@ -95,16 +87,18 @@ public class LinkedList<T> : IEnumerable<T>
             throw new InvalidOperationException();
         }
 
-        var element = this._tail.Value;
+        var element = _tail.Value;
 
         if (this.Count == 1)
         {
-            this._head = this._tail = null;
+            this._head = null;
+            this._tail = null;
         }
         else
         {
-            this._tail = this._tail.Prev;
-            this._tail.Next = null;
+            var secondToLast = GetSecondToLast();
+            this._tail = null;
+            this._tail = secondToLast;
         }
 
         Count--;
@@ -130,5 +124,16 @@ public class LinkedList<T> : IEnumerable<T>
     private bool IsEmpty()
     {
         return Count == 0;
+    }
+
+    private Node GetSecondToLast()
+    {
+        var secondToLast = this._head;
+        while (secondToLast.Next != this._tail)
+        {
+            secondToLast = secondToLast.Next;
+        }
+
+        return secondToLast;
     }
 }
