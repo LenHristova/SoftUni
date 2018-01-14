@@ -6,7 +6,7 @@ public class DoublyLinkedList<T> : IEnumerable<T>
 {
     class Node
     {
-        public T Value { get; set; }
+        public T Value { get; private set; }
 
         public Node Next { get; set; }
 
@@ -18,8 +18,8 @@ public class DoublyLinkedList<T> : IEnumerable<T>
         }
     }
 
-    private Node _first;
-    private Node _last;
+    private Node _head;
+    private Node _tail;
 
     public int Count { get; private set; }
 
@@ -29,14 +29,13 @@ public class DoublyLinkedList<T> : IEnumerable<T>
 
         if (IsEmpty())
         {
-            this._first = newNode;
-            this._last = newNode;
+            this._head = this._tail = newNode;
         }
         else
         {
-            newNode.Next = this._first;
-            this._first.Prev = newNode;
-            this._first = newNode;
+            newNode.Next = this._head;
+            this._head.Prev = newNode;
+            this._head = newNode;
         }
 
         this.Count++;
@@ -48,14 +47,13 @@ public class DoublyLinkedList<T> : IEnumerable<T>
 
         if (IsEmpty())
         {
-            this._first = newNode;
-            this._last = newNode;
+            this._head = this._tail = newNode;
         }
         else
         {
-            newNode.Prev = this._last;
-            this._last.Next = newNode;
-            this._last = newNode;
+            newNode.Prev = this._tail;
+            this._tail.Next = newNode;
+            this._tail = newNode;
         }
 
         this.Count++;
@@ -68,22 +66,21 @@ public class DoublyLinkedList<T> : IEnumerable<T>
             throw new InvalidOperationException("No elements!");
         }
 
-        var element = this._first.Value;
+        var firstElement = this._head.Value;
 
         if (this.Count == 1)
         {
-            this._first = null;
-            this._last = null;
+            this._head = this._tail = null;
         }
         else
         {
-            this._first = this._first.Next;
-            this._first.Prev = null;
+            this._head = this._head.Next;
+            this._head.Prev = null;
         }
 
         this.Count--;
 
-        return element;
+        return firstElement;
     }
 
     public T RemoveLast()
@@ -93,37 +90,36 @@ public class DoublyLinkedList<T> : IEnumerable<T>
             throw new InvalidOperationException("No elements!");
         }
 
-        var element = this._last.Value;
+        var lastElement = this._tail.Value;
 
         if (this.Count == 1)
         {
-            this._first = null;
-            this._last = null;
+            this._head = this._tail = null;
         }
         else
         {
-            this._last = this._last.Prev;
-            this._last.Next = null;
+            this._tail = this._tail.Prev;
+            this._tail.Next = null;
         }
 
         this.Count--;
 
-        return element;
+        return lastElement;
     }
 
     public void ForEach(Action<T> action)
     {
-        var current = this._first;
+        var current = this._head;
         while (current != null)
         {
-            action.Invoke(current.Value);
+            action(current.Value);
             current = current.Next;
         }
     }
 
     public IEnumerator<T> GetEnumerator()
     {
-        var current = this._first;
+        var current = this._head;
         while (current != null)
         {
             yield return current.Value;
@@ -140,7 +136,7 @@ public class DoublyLinkedList<T> : IEnumerable<T>
     {
         var arr = new T[this.Count];
 
-        var current = this._first;
+        var current = this._head;
         for (int i = 0; i < this.Count; i++)
         {
             arr[i] = current.Value;
