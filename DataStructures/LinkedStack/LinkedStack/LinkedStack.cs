@@ -18,7 +18,7 @@ class LinkedStack<T> : IEnumerable<T>
     {
         if (IsEmpty())
         {
-            throw new InvalidOperationException("LinckedStack empty!");
+            throw new InvalidOperationException("LinkedStack is empty!");
         }
 
         var element = this._first.Value;
@@ -34,7 +34,7 @@ class LinkedStack<T> : IEnumerable<T>
     {
         if (IsEmpty())
         {
-            throw new InvalidOperationException("LinckedStack empty!");
+            throw new InvalidOperationException("LinkedStack is empty!");
         }
 
         return this._first.Value;
