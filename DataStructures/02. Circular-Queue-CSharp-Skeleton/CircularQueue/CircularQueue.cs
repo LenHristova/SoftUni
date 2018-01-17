@@ -42,6 +42,11 @@ public class CircularQueue<T>
 
     public T Peek()
     {
+		if (IsEmpty())
+        {
+            throw new InvalidOperationException("The queue is empty!");
+        }
+		
         return this._array[this._head];
     }
 
