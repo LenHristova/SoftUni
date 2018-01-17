@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 public class ArrayStack<T> : IEnumerable<T>
 {
-    public T[] _array;
+    private T[] _array;
 
     public int Count { get; set; }
 
-    public ArrayStack(int capacity = 2)
+    public ArrayStack(int capacity = 16)
     {
         this._array = new T[capacity];
         this.Count = 0;
@@ -18,11 +18,10 @@ public class ArrayStack<T> : IEnumerable<T>
     {
         if (this.Count == this._array.Length)
         {
-            ResizeUp();
+            Array.Resize(ref this._array, this._array.Length * 2);
         }
 
-        this._array[this.Count] = element;
-        this.Count++;
+        this._array[this.Count++] = element;
     }
 
     public T Pop()
@@ -32,13 +31,12 @@ public class ArrayStack<T> : IEnumerable<T>
             throw new InvalidOperationException("ArrayStack empty!");
         }
 
-        this.Count--;
-        var element = this._array[this.Count];
+        var element = this._array[--this.Count];
         this._array[this.Count] = default(T);
 
         if (this.Count < this._array.Length / 4)
         {
-            ResizeDown();
+            Array.Resize(ref this._array, this._array.Length / 2);
         }
 
         return element;
@@ -56,7 +54,7 @@ public class ArrayStack<T> : IEnumerable<T>
 
     public void Clear()
     {
-        this._array = new T[2];
+        this._array = new T[16];
         this.Count = 0;
     }
 
@@ -80,9 +78,9 @@ public class ArrayStack<T> : IEnumerable<T>
 
     public bool Contains(T element)
     {
-        foreach (var el in this._array)
+        for (int i = 0; i < this.Count; i++)
         {
-            if (el.Equals(element))
+            if (this._array[i].Equals(element))
             {
                 return true;
             }
@@ -93,12 +91,7 @@ public class ArrayStack<T> : IEnumerable<T>
 
     public void CopyTo(T[] array, int startIndex)
     {
-        var copy = new T[this.Count];
-        for (int i = 0; i < this.Count; i++)
-        {
-            copy[i] = this._array[this.Count - i - 1];
-        }
-        Array.Copy(copy, 0, array, startIndex, this.Count);
+        Array.Copy(this.ToArray(), 0, array, startIndex, this.Count);
     }
 
     public IEnumerator<T> GetEnumerator()
@@ -117,22 +110,6 @@ public class ArrayStack<T> : IEnumerable<T>
     private bool IsEmpty()
     {
         return this.Count == 0;
-    }
-
-    private void ResizeUp()
-    {
-        var copy = new T[this._array.Length * 2];
-
-        Array.Copy(this._array, copy, this.Count);
-        this._array = copy;
-    }
-
-    private void ResizeDown()
-    {
-        var copy = new T[this._array.Length / 2];
-
-        Array.Copy(this._array, copy, this.Count);
-        this._array = copy;
     }
 }
 
