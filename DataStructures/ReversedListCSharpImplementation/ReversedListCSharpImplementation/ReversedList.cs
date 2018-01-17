@@ -4,15 +4,16 @@ using System.Collections.Generic;
 
 class ReversedList<T> : IEnumerable<T>
 {
-    public int Count { get; set; }
-    public int Capacity { get; set; }
+	private T[] _elements;
 
-    private T[] _elements;
+    public int Count { get; private set; }
+    public int Capacity { get; private set; }
 
     public ReversedList(int capacity = 2)
     {
+		this._elements = new T[capacity];
         this.Capacity = capacity;
-        this._elements = new T[capacity];
+        this.Count = 0;
     }
 
     public T this[int index]
@@ -44,18 +45,19 @@ class ReversedList<T> : IEnumerable<T>
     {
         if (this.Count == this.Capacity)
         {
-            ResizeUp();
+            this.Capacity *= 2;
+            Array.Resize(ref this._elements, this.Capacity);
         }
 
-        this._elements[this.Count] = element;
-        Count++;
+        this._elements[this.Count++] = element;
     }
 
     public void RemoveAt(int index)
     {
         if (this.Count < this.Capacity / 4)
         {
-            ResizeDown();
+            this.Capacity /= 2;
+            Array.Resize(ref this._elements, this.Capacity);
         }
 
         var reversedIndex = this.Count - index - 1;
@@ -65,22 +67,6 @@ class ReversedList<T> : IEnumerable<T>
         }
 
         this.Count--;
-    }
-
-    private void ResizeDown()
-    {
-        this.Capacity /= 2;
-        var copy = new T[this.Capacity];
-        Array.Copy(this._elements, copy, this.Count);
-        this._elements = copy;
-    }
-
-    private void ResizeUp()
-    {
-        this.Capacity *= 2;
-        var copy = new T[this.Capacity];
-        Array.Copy(this._elements, copy, this.Count);
-        this._elements = copy;
     }
 
     public IEnumerator<T> GetEnumerator()
