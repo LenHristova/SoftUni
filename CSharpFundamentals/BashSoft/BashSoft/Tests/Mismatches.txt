@@ -1,6 +1,6 @@
-Some data not
+aaa
 
-Some more data 
+Mismatch at line 1 -- expected: "aaa", actual: "bbb"
 
-more da 21 ta
+aaa
 
