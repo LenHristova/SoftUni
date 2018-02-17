@@ -34,7 +34,7 @@
         }
 
         ////Prints student userName and grades
-        public static void DisplayStudent(KeyValuePair<string, List<int>> student)
+        public static void PrintStudent(KeyValuePair<string, List<int>> student)
         {
             WriteMessageOnNewLine($"{student.Key} - {string.Join(", ", student.Value)}");
         }

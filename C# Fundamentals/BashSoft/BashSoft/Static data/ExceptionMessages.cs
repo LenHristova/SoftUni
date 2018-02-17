@@ -13,6 +13,8 @@
         public const string UnableToGoHigherInPartitionHierarchy = "Unable to go higher in partition hierarchy!";       
         public const string UnableToParseNumber = "The sequence you've written is not a valid number.";       
         public const string InvalidStudentFilter = "The given filter is not one of the following: excellent/average/poor";    
-        public const string InvalidTakeQuantityParameter = "The take command expected does not match the format wanted!";    
+        public const string InvalidTakeQuantityParameter = "The take command expected does not match the format wanted!";
+        public const string InvalidComparisonQuery =
+            "The comparison query you want, does not exist in the context of the current program!";
     }
 }

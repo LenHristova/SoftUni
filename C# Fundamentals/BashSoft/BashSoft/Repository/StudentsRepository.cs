@@ -27,7 +27,7 @@
             }
         }
 
-        //Reads data from file and save it in data structure 
+        //Reads data from file and save it to the repo 
         private static void ReadData(string fileName)
         {
             var path = $"{SessionData.currentPath}\\{fileName}";
@@ -53,21 +53,19 @@
                         //if score is number from 0 to 100 -> updates data for course and student
                         if (hasParsedScore && studentScoreOnTask >= 0 && studentScoreOnTask <= 100)
                         {
-                            //If current course is not exist in data structure,
-                            //adds to the data structure
+                            //If current course doesn't exist in the repo -> add it
                             if (!_studentsByCourse.ContainsKey(courseName))
                             {
                                 _studentsByCourse.Add(courseName, new Dictionary<string, List<int>>());
                             }
 
-                            //If current student is not exist in data structure for current course,
-                            //adds to the data structure
+                            //If current student doesn't exist in current course -> add it
                             if (!_studentsByCourse[courseName].ContainsKey(username))
                             {
                                 _studentsByCourse[courseName].Add(username, new List<int>());
                             }
 
-                            //Adds current student's grades to the data structure
+                            //Adds current student's grades to the repo
                             _studentsByCourse[courseName][username].Add(studentScoreOnTask);
                         }
                     }
@@ -87,7 +85,7 @@
             //Query for course is possible if data is initialized
             if (isDataInitialized)
             {
-                //And query for course is possible if course exist in data structure
+                //And query for course is possible if course exist in the repo
                 if (_studentsByCourse.ContainsKey(courseName))
                 {
                     return true;
@@ -108,10 +106,10 @@
         private static bool IsQueryForStudentPossiblе(string courseName, string studentUsername)
         {
             //Query for student is possible if data is initialized 
-            //and current course exist in data structure 
+            //and current course exist in the repo 
             if (IsQueryForCoursePossible(courseName))
             {
-                // Query for student is possible if student exist in data structure
+                // Query for student is possible if student exist in the repo
                 if (_studentsByCourse[courseName].ContainsKey(studentUsername))
                 {
                     return true;
@@ -133,7 +131,7 @@
                 var student =
                     new KeyValuePair<string, List<int>>(studentUsername,
                         _studentsByCourse[courseName][studentUsername]);
-                OutputWriter.DisplayStudent(student);
+                OutputWriter.PrintStudent(student);
             }
         }
 
@@ -145,7 +143,7 @@
                 OutputWriter.WriteMessageOnNewLine($"{courseName}:");
                 foreach (var student in _studentsByCourse[courseName])
                 {
-                    OutputWriter.DisplayStudent(student);
+                    OutputWriter.PrintStudent(student);
                 }
             }
         }

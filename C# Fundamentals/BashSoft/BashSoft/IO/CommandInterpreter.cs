@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace BashSoft
 {
@@ -8,7 +7,6 @@ namespace BashSoft
 
     public static class CommandInterpreter
     {
-
         public static void InterpretCommand(string input)
         {
             var data = input.Split();
