@@ -1,13 +1,25 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
+using BashSoft.Judge;
+using BashSoft.Repository;
+using BashSoft.Static_data;
 
-namespace BashSoft
+namespace BashSoft.IO
 {
-    using System.Diagnostics;
-    using SimpleJudge;
-
-    public static class CommandInterpreter
+    public class CommandInterpreter
     {
-        public static void InterpretCommand(string input)
+        private readonly Tester _judge;
+        private readonly StudentsRepository _repository;
+        private readonly IOManager _inputOutputManager;
+
+        public CommandInterpreter(Tester judge, StudentsRepository repository, IOManager inputOutputManager)
+        {
+            _judge = judge;
+            _repository = repository;
+            _inputOutputManager = inputOutputManager;
+        }
+
+        public void InterpretCommand(string input)
         {
             var data = input.Split();
             var command = data[0];
@@ -55,15 +67,30 @@ namespace BashSoft
                 case "downloadAsynch":
                     //TODO
                     break;
+                case "drobDb":
+                    TryDropDb(input, data);
+                    break;
                 default:
                     DisplayInvalidCommandMessage(input);
                     break;
             }
         }
 
+        private void TryDropDb(string input, string[] data)
+        {
+            if (data.Length!=1)
+            {
+                DisplayInvalidCommandMessage(input);
+                return;
+            }
+            
+            _repository.UnloadData();
+            OutputWriter.WriteMessageOnNewLine("Database dropped!");
+        }
+
         //Orders and takes students IF data consists 5 elements ->
         // courseName + orderType + takeCommand + takeQuantity
-        private static void TryOrderAndTake(string input, string[] data)
+        private void TryOrderAndTake(string input, string[] data)
         {
             if (data.Length == 5)
             {
@@ -81,21 +108,21 @@ namespace BashSoft
         }
 
         //Parse parameters for order and take IF takeCommand is "take" and takeQuantity is number or "all"
-        private static void TryParseParametersForOrderAndTake(string takeCommand, string takeQuantity, string courseName, string orderType)
+        private void TryParseParametersForOrderAndTake(string takeCommand, string takeQuantity, string courseName, string orderType)
         {
             if (takeCommand == "take")
             {
                 if (takeQuantity == "all")
                 {
-                    StudentsRepository.OrderAndTake(courseName, orderType);
+                    _repository.OrderAndTake(courseName, orderType);
                 }
                 else
                 {
-                    var hasParsed = int.TryParse(takeQuantity, out int studentsToTake);
+                    var hasParsed = int.TryParse(takeQuantity, out var studentsToTake);
 
                     if (hasParsed)
                     {
-                        StudentsRepository.OrderAndTake(courseName, orderType, studentsToTake);
+                        _repository.OrderAndTake(courseName, orderType, studentsToTake);
                     }
                     else
                     {
@@ -111,7 +138,7 @@ namespace BashSoft
 
         //Filters and takes students IF data consists 5 elements ->
         // courseName + filter + takeCommand + takeQuantity
-        private static void TryFilterAndTake(string input, string[] data)
+        private void TryFilterAndTake(string input, string[] data)
         {
             if (data.Length == 5)
             {
@@ -129,20 +156,20 @@ namespace BashSoft
         }
 
         //Parse parameters for filter and take IF takeCommand is "take" and takeQuantity is number or "all"
-        private static void TryParseParametersForFilterAndTake(string takeCommand, string takeQuantity, string courseName, string filter)
+        private void TryParseParametersForFilterAndTake(string takeCommand, string takeQuantity, string courseName, string filter)
         {
             if (takeCommand == "take")
             {
                 if (takeQuantity == "all")
                 {
-                    StudentsRepository.FilterAndTake(courseName, filter);
+                    _repository.FilterAndTake(courseName, filter);
                 }
                 else
                 {
-                    var hasParsed = int.TryParse(takeQuantity, out int studentsToTake);
+                    var hasParsed = int.TryParse(takeQuantity, out var studentsToTake);
                     if (hasParsed)
                     {
-                        StudentsRepository.FilterAndTake(courseName, filter, studentsToTake);
+                        _repository.FilterAndTake(courseName, filter, studentsToTake);
                     }
                     else
                     {
@@ -159,18 +186,18 @@ namespace BashSoft
         //Shows info IF data consists 2 or 3 elements 
         // 2 elements -> command + course's name 
         // 3 elements -> command + course's name + student's username
-        private static void TryShowWantedData(string input, string[] data)
+        private void TryShowWantedData(string input, string[] data)
         {
             if (data.Length == 2)
             {
                 var courseName = data[1];
-                StudentsRepository.GetAllStudentsFromCourse(courseName);
+                _repository.GetAllStudentsFromCourse(courseName);
             }
             else if (data.Length == 3)
             {
                 var courseName = data[1];
                 var studentUsername = data[2];
-                StudentsRepository.GetStudentScoresFromCourse(courseName, studentUsername);
+                _repository.GetStudentScoresFromCourse(courseName, studentUsername);
             }
             else
             {
@@ -179,7 +206,7 @@ namespace BashSoft
         }
 
         //Shows help IF data consists 1 elements -> command
-        private static void TryGetHelp(string input, string[] data)
+        private void TryGetHelp(string input, string[] data)
         {
             if (data.Length == 1)
             {
@@ -217,12 +244,12 @@ namespace BashSoft
         }
 
         //Reads database from file IF data consists 2 elements -> command + file's name
-        private static void TryReadDatabaseFromFile(string input, string[] data)
+        private void TryReadDatabaseFromFile(string input, string[] data)
         {
             if (data.Length == 2)
             {
                 var fileName = data[1];
-                StudentsRepository.InitializeData(fileName);
+                _repository.LoadData(fileName);
             }
             else
             {
@@ -231,12 +258,12 @@ namespace BashSoft
         }
 
         //Changes path relatively IF data consists 2 elements -> command + absolute path
-        private static void TryChangePathAbsolute(string input, string[] data)
+        private void TryChangePathAbsolute(string input, string[] data)
         {
             if (data.Length == 2)
             {
                 var absPath = data[1];
-                IOManager.ChangeCurrentDirectoryAbsolute(absPath);
+                _inputOutputManager.ChangeCurrentDirectoryAbsolute(absPath);
             }
             else
             {
@@ -245,12 +272,12 @@ namespace BashSoft
         }
 
         //Changes path relatively IF data consists 2 elements -> command + relative path
-        private static void TryChangePathRelatively(string input, string[] data)
+        private void TryChangePathRelatively(string input, string[] data)
         {
             if (data.Length == 2)
             {
                 var relPath = data[1];
-                IOManager.ChangeCurrentDirectoryRelative(relPath);
+                _inputOutputManager.ChangeCurrentDirectoryRelative(relPath);
             }
             else
             {
@@ -260,14 +287,14 @@ namespace BashSoft
 
         //Compares files IF data consists 3 elements ->
         //command + absolute path of the first file + absolute path of the second file 
-        private static void TryCompareFiles(string input, string[] data)
+        private void TryCompareFiles(string input, string[] data)
         {
             if (data.Length == 3)
             {
                 var firstPath = data[1];
                 var secondPath = data[2];
 
-                Tester.CompareContent(firstPath, secondPath);
+                _judge.CompareContent(firstPath, secondPath);
             }
             else
             {
@@ -278,20 +305,20 @@ namespace BashSoft
         //Traverses directory. Valid input (data) consists 1 or 2 elements
         //1 element -> command (default depth is 0)
         //2 element -> command + depth
-        private static void TryTraverseFolders(string input, string[] data)
+        private void TryTraverseFolders(string input, string[] data)
         {
             if (data.Length == 1)
             {
                 var depth = 0;
-                IOManager.TraverseDirectory(depth);
+                _inputOutputManager.TraverseDirectory(depth);
             }
             else if (data.Length == 2)
             {
                 //check if second element is a number
-                var hasParsed = int.TryParse(data[1], out int depth);
+                var hasParsed = int.TryParse(data[1], out var depth);
                 if (hasParsed)
                 {
-                    IOManager.TraverseDirectory(depth);
+                    _inputOutputManager.TraverseDirectory(depth);
                 }
                 else
                 {
@@ -305,12 +332,12 @@ namespace BashSoft
         }
 
         //Creates directory IF data consist 2 elements -> command + directory's name
-        private static void TryCreateDirectory(string input, string[] data)
+        private void TryCreateDirectory(string input, string[] data)
         {
             if (data.Length == 2)
             {
                 var folderName = data[1];
-                IOManager.CreateDirectoryInCurrentFolder(folderName);
+                _inputOutputManager.CreateDirectoryInCurrentFolder(folderName);
             }
             else
             {
@@ -319,7 +346,7 @@ namespace BashSoft
         }
 
         //Opens file IF data consist 2 elements -> command + file's name
-        private static void TryOpenFile(string input, string[] data)
+        private void TryOpenFile(string input, string[] data)
         {
             if (data.Length == 2)
             {
@@ -342,7 +369,7 @@ namespace BashSoft
             }
         }
 
-        private static void DisplayInvalidCommandMessage(string input)
+        private void DisplayInvalidCommandMessage(string input)
         {
             OutputWriter.WriteMessageOnNewLine($"The command '{input}' is invalid");
         }

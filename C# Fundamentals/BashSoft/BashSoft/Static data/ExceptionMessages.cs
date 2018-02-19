@@ -1,4 +1,4 @@
-﻿namespace BashSoft
+﻿namespace BashSoft.Static_data
 {
     public static class ExceptionMessages
     {
@@ -16,5 +16,9 @@
         public const string InvalidTakeQuantityParameter = "The take command expected does not match the format wanted!";
         public const string InvalidComparisonQuery =
             "The comparison query you want, does not exist in the context of the current program!";
+        public const string StudentAlreadyEnrolledInGivenCourse = "The {0} already exists in {1}.";
+        public const string NotEnrolledInCourse = "Student must be enrolled in a course before you set his mark.";
+        public const string InvalidNumberOfScores = "The number of scores for the given course is greater than the possible.";
+        public const string InvalidScore = "The score for the given course is greater or smaller than the possible.";
     }
 }

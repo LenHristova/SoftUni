@@ -1,14 +1,15 @@
-﻿namespace BashSoft
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using BashSoft.Static_data;
 
-    public static class IOManager
+namespace BashSoft.IO
+{
+    public class IOManager
     {
         //Traverses the current directory and the subdirectories to the required depth 
         //and writes their paths and the names of the files in each directory
-        public static void TraverseDirectory(int depth)
+        public void TraverseDirectory(int depth)
         {
             OutputWriter.WriteEmptyLine();
             var initialIdentation = SessionData.currentPath.Split('\\').Length;
@@ -52,7 +53,7 @@
             }
         }
 
-        public static void CreateDirectoryInCurrentFolder(string name)
+        public void CreateDirectoryInCurrentFolder(string name)
         {
             try
             {
@@ -65,7 +66,7 @@
             }
         }
 
-        public static void ChangeCurrentDirectoryRelative(string realitivePath)
+        public void ChangeCurrentDirectoryRelative(string realitivePath)
         {
             //Check if user wants to goes one folder back
             if (realitivePath == "..")
@@ -91,7 +92,7 @@
             }
         }
 
-        public static void ChangeCurrentDirectoryAbsolute(string absolutePath)
+        public void ChangeCurrentDirectoryAbsolute(string absolutePath)
         {
             if (!Directory.Exists(absolutePath))
             {

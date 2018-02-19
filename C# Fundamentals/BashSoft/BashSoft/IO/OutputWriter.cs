@@ -1,8 +1,8 @@
-﻿namespace BashSoft
-{
-    using System;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
+namespace BashSoft.IO
+{
     public static class OutputWriter
     {
         //Writes message to the currently set output
@@ -27,16 +27,16 @@
         //writes a message and then reverses the color
         public static void DisplayException(string message)
         {
-            ConsoleColor currentColor = Console.ForegroundColor;
+            var currentColor = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(message);
             Console.ForegroundColor = currentColor;
         }
 
-        ////Prints student userName and grades
-        public static void PrintStudent(KeyValuePair<string, List<int>> student)
+        ////Prints student userName and mark
+        public static void PrintStudent(KeyValuePair<string, double> student)
         {
-            WriteMessageOnNewLine($"{student.Key} - {string.Join(", ", student.Value)}");
+            WriteMessageOnNewLine($"{student.Key} - {student.Value}");
         }
     }
 }
