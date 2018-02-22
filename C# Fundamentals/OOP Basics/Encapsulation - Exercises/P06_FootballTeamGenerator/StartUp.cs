@@ -55,12 +55,12 @@ namespace P06_FootballTeamGenerator
 
         private static void PrintTeamReting(string[] commandArgs)
         {
-            Validations.ValidateCommandLength(commandArgs.Length, 2);
+            Validator.ValidateCommandLength(commandArgs.Length, 2);
 
             var teamName = commandArgs[1];
-            Validations.ValidateName(teamName);
+            Validator.ValidateName(teamName);
 
-            Validations.ValidateTeamExistInCollection(_teams, teamName);
+            Validator.ValidateTeamExistInCollection(_teams, teamName);
 
             var team = _teams[teamName];
             Console.WriteLine($"{team.Name} - {team.Rating}");
@@ -68,44 +68,44 @@ namespace P06_FootballTeamGenerator
 
         private static void RemovePlayerFromTeam(string[] commandArgs)
         {
-            Validations.ValidateCommandLength(commandArgs.Length, 3);
+            Validator.ValidateCommandLength(commandArgs.Length, 3);
 
             var teamName = commandArgs[1];
-            Validations.ValidateName(teamName);
+            Validator.ValidateName(teamName);
             var playerName = commandArgs[2];
-            Validations.ValidateName(playerName);
+            Validator.ValidateName(playerName);
 
-            Validations.ValidateTeamExistInCollection(_teams, teamName);
+            Validator.ValidateTeamExistInCollection(_teams, teamName);
 
             _teams[teamName].TryToRemovePlayer(playerName);
         }
 
         private static void TryToAddNewPlayerToTeam(string[] commandArgs)
         {
-            Validations.ValidateCommandLength(commandArgs.Length, 8);
+            Validator.ValidateCommandLength(commandArgs.Length, 8);
 
             var teamName = commandArgs[1];
-            Validations.ValidateName(teamName);
+            Validator.ValidateName(teamName);
             var playerName = commandArgs[2];
-            Validations.ValidateName(playerName);
+            Validator.ValidateName(playerName);
             var playerStats = commandArgs
                 .Skip(3)
                 .Select(int.Parse)
                 .ToList();
 
-            Validations.ValidateTeamExistInCollection(_teams, teamName);
+            Validator.ValidateTeamExistInCollection(_teams, teamName);
 
             _teams[teamName].AddNewPlayer(playerName, playerStats);
         }
 
         private static void TryToAddNewTeam(string[] commandArgs)
         {
-            Validations.ValidateCommandLength(commandArgs.Length, 2);
+            Validator.ValidateCommandLength(commandArgs.Length, 2);
 
             var teamName = commandArgs[1];
-            Validations.ValidateName(teamName);
+            Validator.ValidateName(teamName);
 
-            Validations.ValidateTeamDoesNotExistInCollection(_teams, teamName);
+            Validator.ValidateTeamDoesNotExistInCollection(_teams, teamName);
 
             _teams.Add(teamName, new Team(teamName));
         }

@@ -16,7 +16,7 @@ namespace P06_FootballTeamGenerator
             get => _name;
             private set
             {
-                Validations.ValidateName(value);
+                Validator.ValidateName(value);
                 _name = value;
             }
         }
@@ -29,14 +29,14 @@ namespace P06_FootballTeamGenerator
 
         public void AddNewPlayer(string playerName, List<int> stats)
         {
-            Validations.ValidatePlayerIsNotInTeam(playerName, this.Name, this._players);
+            Validator.ValidatePlayerIsNotInTeam(playerName, this.Name, this._players);
 
             _players[playerName] = new Player(playerName, stats);
         }
 
         public void TryToRemovePlayer(string playerName)
         {
-            Validations.ValidatePlayerIsInTeam(playerName, this.Name, this._players);
+            Validator.ValidatePlayerIsInTeam(playerName, this.Name, this._players);
 
             _players.Remove(playerName);
         }

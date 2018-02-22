@@ -13,7 +13,7 @@ namespace P06_FootballTeamGenerator
             get => _name;
             private set
             {
-                Validations.ValidateName(value);
+                Validator.ValidateName(value);
                 _name = value;
             }
         }
@@ -25,7 +25,7 @@ namespace P06_FootballTeamGenerator
             get => _stats;
             set
             {
-                Validations.ValidateStats(value);
+                Validator.ValidateStats(value);
                 _stats = value;
             }
         }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace P06_FootballTeamGenerator
 {
-    public static class Validations
+    public static class Validator
     {
         private const string EmptyName = "A name should not be empty.";
         private const string InvalidStatsRange = "{0} should be between 0 and 100.";
@@ -15,7 +15,7 @@ namespace P06_FootballTeamGenerator
 
         public static void ValidateName(string name)
         {
-            if (String.IsNullOrWhiteSpace(name) || name == String.Empty)
+            if (String.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentException(EmptyName);
             }
