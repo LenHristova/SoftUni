@@ -58,8 +58,6 @@ namespace P06_FootballTeamGenerator
             Validator.ValidateCommandLength(commandArgs.Length, 2);
 
             var teamName = commandArgs[1];
-            Validator.ValidateName(teamName);
-
             Validator.ValidateTeamExistInCollection(_teams, teamName);
 
             var team = _teams[teamName];
@@ -71,12 +69,9 @@ namespace P06_FootballTeamGenerator
             Validator.ValidateCommandLength(commandArgs.Length, 3);
 
             var teamName = commandArgs[1];
-            Validator.ValidateName(teamName);
-            var playerName = commandArgs[2];
-            Validator.ValidateName(playerName);
-
             Validator.ValidateTeamExistInCollection(_teams, teamName);
 
+            var playerName = commandArgs[2];
             _teams[teamName].TryToRemovePlayer(playerName);
         }
 
@@ -85,16 +80,14 @@ namespace P06_FootballTeamGenerator
             Validator.ValidateCommandLength(commandArgs.Length, 8);
 
             var teamName = commandArgs[1];
-            Validator.ValidateName(teamName);
+            Validator.ValidateTeamExistInCollection(_teams, teamName);
+
             var playerName = commandArgs[2];
-            Validator.ValidateName(playerName);
             var playerStats = commandArgs
                 .Skip(3)
                 .Select(int.Parse)
                 .ToList();
-
-            Validator.ValidateTeamExistInCollection(_teams, teamName);
-
+           
             _teams[teamName].AddNewPlayer(playerName, playerStats);
         }
 
@@ -103,8 +96,6 @@ namespace P06_FootballTeamGenerator
             Validator.ValidateCommandLength(commandArgs.Length, 2);
 
             var teamName = commandArgs[1];
-            Validator.ValidateName(teamName);
-
             Validator.ValidateTeamDoesNotExistInCollection(_teams, teamName);
 
             _teams.Add(teamName, new Team(teamName));
