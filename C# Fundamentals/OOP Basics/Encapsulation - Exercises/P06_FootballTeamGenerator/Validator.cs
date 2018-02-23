@@ -47,7 +47,7 @@ namespace P06_FootballTeamGenerator
         public static void ValidateTeamDoesNotExistInCollection(IReadOnlyDictionary<string, Team> teams, string teamName)
         {
             if (teams.ContainsKey(teamName))
-                throw new KeyNotFoundException(string.Format(TeamExist, teamName));
+                throw new ArgumentException (string.Format(TeamExist, teamName));
         }
 
         public static void ValidatePlayerIsInTeam(string playerName, string teamName, Dictionary<string, Player> playersInTeam)
@@ -59,7 +59,7 @@ namespace P06_FootballTeamGenerator
         public static void ValidatePlayerIsNotInTeam(string playerName, string teamName, Dictionary<string, Player> playersInTeam)
         {
             if (playersInTeam.ContainsKey(playerName))
-                throw new KeyNotFoundException(string.Format(PlayerExist, playerName, teamName));
+                throw new ArgumentException (string.Format(PlayerExist, playerName, teamName));
         }
 
         private enum Stats
