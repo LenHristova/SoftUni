@@ -1,26 +1,14 @@
 ﻿using System;
 
-public abstract class Provider : IIdentifiable
+public abstract class Provider : Miner
 {
     private const double MAX_ENERGY_OUTPUT = 9_999;
 
-    private string _id;
     private double _energyOutput;
 
-    protected Provider(string id, double energyOutput)
+    protected Provider(string id, double energyOutput) : base(id)
     {
-        Id = id;
         EnergyOutput = energyOutput;
-    }
-
-    public string Id
-    {
-        get { return _id; }
-        protected set
-        {
-            Validator.ValidateStringNotNullOrWhiteSpace(value, nameof(Id));
-            _id = value;
-        }
     }
 
     public double EnergyOutput

@@ -1,28 +1,16 @@
 ﻿using System;
 
-public abstract class Harvester : IIdentifiable
+public abstract class Harvester : Miner
 {
     private const double MAX_ENERGY_REQUIREMENT = 20_000;
 
-    private string _id;
     private double _oreOutput;
     private double _energyRequirement;
 
-    protected Harvester(string id, double oreOutput, double energyRequirement)
+    protected Harvester(string id, double oreOutput, double energyRequirement) : base(id)
     {
-        Id = id;
         OreOutput = oreOutput;
         EnergyRequirement = energyRequirement;
-    }
-
-    public string Id
-    {
-        get { return _id; }
-        protected set
-        {
-            Validator.ValidateStringNotNullOrWhiteSpace(value, nameof(Id));
-            _id = value;
-        }
     }
 
     public double OreOutput

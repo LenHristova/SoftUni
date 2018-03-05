@@ -113,7 +113,7 @@ public class DraftManager
     {
         var id = arguments[0];
         var currentElement = _harvesters.FirstOrDefault(h => h.Id == id)
-                             ?? (IIdentifiable)_providers.FirstOrDefault(p => p.Id == id);
+                             ?? (Miner)_providers.FirstOrDefault(p => p.Id == id);
 
         return currentElement == null 
             ? $"No element found with id - {id}" 
