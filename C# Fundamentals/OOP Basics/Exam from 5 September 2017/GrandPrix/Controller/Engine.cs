@@ -19,14 +19,7 @@ public class Engine
 
         while (!_raceTower.HasFinished)
         {
-            try
-            {
-                ParseCommand();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            ParseCommand();
         }
 
         Console.WriteLine(_raceTower.GetWinner());
@@ -34,7 +27,7 @@ public class Engine
 
     private void ParseCommand()
     {
-        var commandArgs = Console.ReadLine().Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+        var commandArgs = Console.ReadLine().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
         var command = commandArgs[0];
         var raceTowerCommandArgs = commandArgs.Skip(1).ToList();
