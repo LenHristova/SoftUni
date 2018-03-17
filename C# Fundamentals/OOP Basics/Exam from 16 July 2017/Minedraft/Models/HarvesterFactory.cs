@@ -15,10 +15,8 @@ public static class HarvesterFactory
             case "Sonic":
                 var sonicFactor = int.Parse(parameters[4]);
                 return new SonicHarvester(id, oreOutput, energyRequirement, sonicFactor);
-
             case "Hammer":
                 return new HammerHarvester(id, oreOutput, energyRequirement);
-
             default:
                 throw new NotSupportedException();
         }

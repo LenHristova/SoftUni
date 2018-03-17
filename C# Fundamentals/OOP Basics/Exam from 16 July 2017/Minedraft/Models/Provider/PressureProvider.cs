@@ -6,4 +6,6 @@
         : base(id, energyOutput * INCREASE_ENERGY_OUTPUT_INDEX)
     {
     }
+
+    public override string Type => GetType().Name.Replace(base.Type, "");
 }

@@ -23,41 +23,41 @@ public class DraftManager
 
     public string RegisterHarvester(List<string> arguments)
     {
-        var result = string.Empty;
-        try
-        {
-            var newHarvester = HarvesterFactory.CreateHarvester(arguments);
-
-            _harvesters.Add(newHarvester);
-            var type = newHarvester.GetType().Name.Replace("Harvester", "");
-            result = $"Successfully registered {type} Harvester - {newHarvester.Id}";
-        }
-        catch (ArgumentException argEx)
-        {
-            result = $"Harvester is not registered, because of it's {argEx.ParamName}";
-        }
-
-        return result;
+        const string minerType = nameof(Harvester);
+        return Register(minerType, arguments);
     }
 
     public string RegisterProvider(List<string> arguments)
     {
-        var result = string.Empty;
+        const string minerType = nameof(Provider);
+        return Register(minerType, arguments);
+    }
+
+    private string Register(string minerType, IList<string> arguments)
+    {
         try
         {
-            var newProvider = ProviderFactory.CreateProvider(arguments);
+            Miner miner;
+            switch (minerType)
+            {
+                case nameof(Harvester):
+                    miner = HarvesterFactory.CreateHarvester(arguments);
+                    _harvesters.Add((Harvester)miner);
+                    break;
+                case nameof(Provider):
+                    miner = ProviderFactory.CreateProvider(arguments);
+                    _providers.Add((Provider)miner);
+                    break;
+                    default:
+                        throw new NotSupportedException();
+            }
 
-            _providers.Add(newProvider);
-            var type = newProvider.GetType().Name.Replace("Provider", "");
-            
-            result = $"Successfully registered {type} Provider - {newProvider.Id}";
+            return $"Successfully registered {miner.Type} {minerType} - {miner.Id}";
         }
         catch (ArgumentException argEx)
         {
-            result = $"Provider is not registered, because of it's {argEx.ParamName}";
+            return $"{minerType} is not registered, because of it's {argEx.ParamName}";
         }
-
-        return result;
     }
 
     public string Day()
@@ -91,12 +91,10 @@ public class DraftManager
                 _activeModeEnergyRequirementReduce = 1;
                 _activeModeOreOutputReduce = 1;
                 break;
-
             case "half":
                 _activeModeEnergyRequirementReduce = 0.6;
                 _activeModeOreOutputReduce = 0.5;
                 break;
-
             case "energy":
                 _activeModeEnergyRequirementReduce = 0;
                 _activeModeOreOutputReduce = 0;
@@ -104,7 +102,6 @@ public class DraftManager
             default:
                 return "";
         }
-
 
         return $"Successfully changed working mode to {mode} Mode";
     }
@@ -115,8 +112,8 @@ public class DraftManager
         var currentElement = _harvesters.FirstOrDefault(h => h.Id == id)
                              ?? (Miner)_providers.FirstOrDefault(p => p.Id == id);
 
-        return currentElement == null 
-            ? $"No element found with id - {id}" 
+        return currentElement == null
+            ? $"No element found with id - {id}"
             : currentElement.ToString();
     }
 

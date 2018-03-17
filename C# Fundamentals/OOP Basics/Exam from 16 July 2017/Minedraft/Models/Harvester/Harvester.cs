@@ -15,12 +15,8 @@ public abstract class Harvester : Miner
 
     public double OreOutput
     {
-        get
-        {
-            return _oreOutput;
-        }
-
-        protected set
+        get { return _oreOutput; }
+        private set
         {
             Validator.ValidateNotNegative(value, nameof(OreOutput));
             _oreOutput = value;
@@ -29,11 +25,8 @@ public abstract class Harvester : Miner
 
     public double EnergyRequirement
     {
-        get
-        {
-            return _energyRequirement;
-        }
-        protected set
+        get { return _energyRequirement; }
+        private set
         {
             Validator.ValidateNotNegative(value, nameof(EnergyRequirement));
             Validator.ValidateMaxValue(value, MAX_ENERGY_REQUIREMENT, nameof(EnergyRequirement));
@@ -41,10 +34,12 @@ public abstract class Harvester : Miner
         }
     }
 
+    public override string Type => nameof(Harvester);
+
     public override string ToString()
     {
-        return $"{GetType().Name.Replace("Harvester", "")} Harvester - {Id}{Environment.NewLine}" +
-               $"Ore Output: { OreOutput}{Environment.NewLine}" +
-               $"Energy Requirement: { EnergyRequirement}";
+        return $"{Type} Harvester - {Id}{Environment.NewLine}" +
+               $"Ore Output: {OreOutput}{Environment.NewLine}" +
+               $"Energy Requirement: {EnergyRequirement}";
     }
 }

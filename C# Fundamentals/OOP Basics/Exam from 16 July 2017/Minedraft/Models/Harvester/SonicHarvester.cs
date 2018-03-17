@@ -4,4 +4,6 @@
         : base(id, oreOutput, energyRequirement / sonicFactor)
     {
     }
+
+    public override string Type => GetType().Name.Replace(base.Type, "");
 }

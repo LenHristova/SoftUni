@@ -20,9 +20,9 @@ public class StartUp
                 if (input == "Shutdown")
                     break;
             }
-            catch (ArgumentException e)
+            catch (ArgumentException argumentException)
             {
-                sb.AppendLine(e.Message);
+                sb.AppendLine(argumentException.Message);
             }
         }
 
@@ -31,29 +31,23 @@ public class StartUp
 
     private static string ParseCommand(DraftManager draftManager, string input)
     {
-        var comandArgs = input?.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        var comandArgs = input.Split().ToList();
         var command = comandArgs[0];
         var arguments = comandArgs.Skip(1).ToList();
         switch (command)
         {
             case "RegisterHarvester":
                 return draftManager.RegisterHarvester(arguments);
-
             case "RegisterProvider":
                 return draftManager.RegisterProvider(arguments);
-
             case "Day":
                 return draftManager.Day();
-
             case "Mode":
                 return draftManager.Mode(arguments);
-
             case "Check":
                 return draftManager.Check(arguments);
-
             case "Shutdown":
                 return draftManager.ShutDown();
-
             default:
                 throw new NotSupportedException();
         }

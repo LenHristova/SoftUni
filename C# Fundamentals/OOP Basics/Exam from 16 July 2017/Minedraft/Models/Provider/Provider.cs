@@ -13,11 +13,8 @@ public abstract class Provider : Miner
 
     public double EnergyOutput
     {
-        get
-        {
-            return _energyOutput;
-        }
-        protected set
+        get { return _energyOutput; }
+        private set
         {
             Validator.ValidateIsPositive(value, nameof(EnergyOutput));
             Validator.ValidateMaxValue(value, MAX_ENERGY_OUTPUT, nameof(EnergyOutput));
@@ -25,9 +22,11 @@ public abstract class Provider : Miner
         }
     }
 
+    public override string Type => nameof(Provider);
+
     public override string ToString()
     {
-        return $"{GetType().Name.Replace("Provider", "")} Provider - {Id}{Environment.NewLine}" +
-               $"Energy Output: { EnergyOutput}";
+        return $"{Type} Provider - {Id}{Environment.NewLine}" +
+               $"Energy Output: {EnergyOutput}";
     }
 }

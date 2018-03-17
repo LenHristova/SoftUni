@@ -7,10 +7,11 @@
         Id = id;
     }
 
+    public abstract string Type { get; }
     public string Id
     {
         get { return _id; }
-        protected set
+        private set
         {
             Validator.ValidateStringNotNullOrWhiteSpace(value, nameof(Id));
             _id = value;
