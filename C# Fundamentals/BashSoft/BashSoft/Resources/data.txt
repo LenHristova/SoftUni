@@ -1,5 +1,6 @@
-C#_Feb_2015 TimothyPope91_9831 69
-JSApps_Dec_2014 CourtneyGraham11_3481 17
+C#_Feb_2015 TimothyPope91_9831 169
+JSApps_Dec_2014 CourtneyGraham11_3481 17.2
+C#_Jul_2016 BruceReid89_9114 94
 C#_Jul_2016 BruceReid89_9114 94
 WebFundamentals_Oct_2015 LuzHampton57_2294 41
 DataStructures_Apr_2016 EloiseGoodman25_4482 77

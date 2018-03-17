@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using BashSoft.Exceptions;
 using BashSoft.Static_data;
 
 namespace BashSoft.IO
@@ -48,7 +49,7 @@ namespace BashSoft.IO
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    OutputWriter.DisplayException(ExceptionMessages.UnauthorizedAccessExceptionMessage);
+                    OutputWriter.DisplayException(ExceptionMessages.UNAUTHORIZED_ACCESS_EXCEPTION_MESSAGE);
                 }
             }
         }
@@ -62,7 +63,7 @@ namespace BashSoft.IO
             }
             catch (ArgumentException)
             {
-                OutputWriter.DisplayException(ExceptionMessages.ForbiddenSymbolsContainedInName);
+                throw new InvalidFileNameException();
             }
         }
 
@@ -80,7 +81,7 @@ namespace BashSoft.IO
                 }
                 catch (ArgumentOutOfRangeException)
                 {
-                    OutputWriter.DisplayException(ExceptionMessages.UnableToGoHigherInPartitionHierarchy);
+                    throw new InvalidPathException();
                 }
             }
             // or else down in the directory tree
@@ -96,8 +97,7 @@ namespace BashSoft.IO
         {
             if (!Directory.Exists(absolutePath))
             {
-                OutputWriter.DisplayException(ExceptionMessages.InvalidPath);
-                return;
+                throw new InvalidPathException();
             }
 
             SessionData.currentPath = absolutePath;

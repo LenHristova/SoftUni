@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using BashSoft.IO;
 using BashSoft.Static_data;
 
@@ -25,8 +24,7 @@ namespace BashSoft.Repository
                     FilterAndTake(studentsWithMarks, x => x < 3.5, studentsToTake);
                     break;
                 default:
-                    OutputWriter.DisplayException(ExceptionMessages.InvalidStudentFilter);
-                    break;
+                    throw new ArgumentException(ExceptionMessages.INVALID_STUDENT_FILTER);   
             }
         }
 

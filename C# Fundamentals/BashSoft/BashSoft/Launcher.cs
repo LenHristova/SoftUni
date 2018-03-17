@@ -4,7 +4,7 @@ using BashSoft.Repository;
 
 namespace BashSoft
 {
-    class Launcher
+    public class Launcher
     {
         static void Main()
         {

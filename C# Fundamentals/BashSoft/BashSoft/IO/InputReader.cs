@@ -4,7 +4,8 @@ namespace BashSoft.IO
 {
     public class InputReader
     {
-        private const string EndCommand = "quit";
+        private const string END_COMMAND = "quit";
+
         private readonly CommandInterpreter _interpreter;
 
         public InputReader(CommandInterpreter interpreter)
@@ -17,10 +18,13 @@ namespace BashSoft.IO
         {
             OutputWriter.WriteMessage($"{SessionData.currentPath}> ");
             string input;
-            while ((input = Console.ReadLine()?.Trim()) != EndCommand)
+            while ((input = Console.ReadLine()?.Trim()) != END_COMMAND)
             {
-                //Interpret command
-                _interpreter.InterpretCommand(input);
+                if (!string.IsNullOrWhiteSpace(input))
+                {
+                    //Interpret command
+                    _interpreter.InterpretCommand(input);
+                }
                 OutputWriter.WriteMessage($"{SessionData.currentPath}> ");
             }
         }

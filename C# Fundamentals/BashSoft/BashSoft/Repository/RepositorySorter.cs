@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BashSoft.IO;
 using BashSoft.Static_data;
@@ -29,8 +30,7 @@ namespace BashSoft.Repository
                         .ToDictionary(pair => pair.Key, pair => pair.Value));
                     break;
                 default:
-                    OutputWriter.DisplayException(ExceptionMessages.InvalidComparisonQuery);
-                    break;
+                    throw new ArgumentException(ExceptionMessages.INVALID_COMPARISON_QUERY);
             }
         }
 

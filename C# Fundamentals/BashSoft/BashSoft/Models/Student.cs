@@ -1,57 +1,69 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using BashSoft.IO;
-using BashSoft.Static_data;
+using BashSoft.Exceptions;
 
 namespace BashSoft.Models
 {
     public class Student
     {
-        public string _username;
-        public Dictionary<string, Course> _enrolledCourses;
-        public Dictionary<string, double> _marksByCourses;
+        private string _username;
+        private readonly Dictionary<string, Course> _enrolledCourses;
+        private readonly Dictionary<string, double> _marksByCourses;
 
         public Student(string username)
         {
-            _username = username;
+            Username = username;
             _enrolledCourses = new Dictionary<string, Course>();
             _marksByCourses = new Dictionary<string, double>();
         }
 
+        public string Username
+        {
+            get => _username;
+            private set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new InvalidStringException();
+                }
+
+                _username = value;
+            }
+        }
+
+        public IReadOnlyDictionary<string, Course> EnrolledCourses => _enrolledCourses;
+
+        public IReadOnlyDictionary<string, double> MarksByCourses => _marksByCourses;
+
         public void EnrollInCourse(Course course)
         {
-            if (_enrolledCourses.ContainsKey(course._name))
+            if (_enrolledCourses.ContainsKey(course.Name))
             {
-                OutputWriter.DisplayException(string.Format(ExceptionMessages.StudentAlreadyEnrolledInGivenCourse, _username, course._name));
-                return;
+                throw new DuplicateEntryInStructureException(Username, course.Name);
             }
 
-            _enrolledCourses.Add(course._name, course);
+            _enrolledCourses.Add(course.Name, course);
         }
 
         public void SetMarksInCourse(string courseName, params int[] scores)
         {
             if (!_enrolledCourses.ContainsKey(courseName))
             {
-                OutputWriter.DisplayException(ExceptionMessages.NotEnrolledInCourse);
-                return;
+                throw new CourseNotFoundException();
             }
 
-            if (scores.Length > Course.NumberOfTasksOnExam)
+            if (scores.Length > Course.NUMBER_OF_TASKS_ON_EXAM)
             {
-                OutputWriter.DisplayException(ExceptionMessages.InvalidNumberOfScores);
-                return;
+                throw new InvalidNumberOfScoresException();
             }
 
             _marksByCourses.Add(courseName, CalculateMark(scores));
         }
 
-        private double CalculateMark(int[] scores)
+        private static double CalculateMark(IEnumerable<int> scores)
         {
             var persentageOfSolvedExam =
-                scores.Sum() / (double) (Course.NumberOfTasksOnExam * Course.MaxScoreOnExamTask);
+                scores.Sum() / (double)(Course.NUMBER_OF_TASKS_ON_EXAM * Course.MAX_SCORE_ON_EXAM_TASK);
             var mark = persentageOfSolvedExam * 4 + 2;
             return mark;
         }
