@@ -1,6 +1,4 @@
-﻿using System;
-
-public abstract class Harvester : Miner
+﻿public abstract class Harvester : Miner
 {
     private const double MAX_ENERGY_REQUIREMENT = 20_000;
 
@@ -38,8 +36,8 @@ public abstract class Harvester : Miner
 
     public override string ToString()
     {
-        return $"{Type} Harvester - {Id}{Environment.NewLine}" +
-               $"Ore Output: {OreOutput}{Environment.NewLine}" +
+        return $"{Type} Harvester - {Id}{OutputWriter.NewLine}" +
+               $"Ore Output: {OreOutput}{OutputWriter.NewLine}" +
                $"Energy Requirement: {EnergyRequirement}";
     }
 }

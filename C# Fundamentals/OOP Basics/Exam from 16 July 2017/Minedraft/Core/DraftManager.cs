@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 public class DraftManager
 {
+    private readonly HarvesterFactory _harvesterFactory;
+    private readonly ProviderFactory _providerFactory;
     private readonly ICollection<Harvester> _harvesters;
     private readonly ICollection<Provider> _providers;
     private double _totalStoredEnergy;
@@ -13,6 +14,8 @@ public class DraftManager
 
     public DraftManager()
     {
+        _harvesterFactory = new HarvesterFactory();
+        _providerFactory = new ProviderFactory();
         _harvesters = new List<Harvester>();
         _providers = new List<Provider>();
         _totalStoredEnergy = 0.0;
@@ -23,40 +26,39 @@ public class DraftManager
 
     public string RegisterHarvester(List<string> arguments)
     {
-        const string minerType = nameof(Harvester);
-        return Register(minerType, arguments);
+        const string baseType = nameof(Harvester);
+        return Register(baseType, arguments);
     }
 
     public string RegisterProvider(List<string> arguments)
     {
-        const string minerType = nameof(Provider);
-        return Register(minerType, arguments);
+        const string baseType = nameof(Provider);
+        return Register(baseType, arguments);
     }
 
-    private string Register(string minerType, IList<string> arguments)
+    private string Register(string baseType, IList<string> minerArgs)
     {
         try
         {
             Miner miner;
-            switch (minerType)
+            switch (baseType)
             {
                 case nameof(Harvester):
-                    miner = HarvesterFactory.CreateHarvester(arguments);
+                    miner = _harvesterFactory.CreateHarvester(minerArgs);
                     _harvesters.Add((Harvester)miner);
                     break;
                 case nameof(Provider):
-                    miner = ProviderFactory.CreateProvider(arguments);
+                    miner = _providerFactory.CreateProvider(minerArgs);
                     _providers.Add((Provider)miner);
                     break;
-                    default:
-                        throw new NotSupportedException();
+                default:
+                    throw new InvalidCommandExeption();
             }
-
-            return $"Successfully registered {miner.Type} {minerType} - {miner.Id}";
+            return $"Successfully registered {miner.Type} {baseType} - {miner.Id}";
         }
-        catch (ArgumentException argEx)
+        catch (InvalidPropertyExeption argEx)
         {
-            return $"{minerType} is not registered, because of it's {argEx.ParamName}";
+            return $"{baseType} is not registered, because of it's {argEx.ParamName}";
         }
     }
 
@@ -77,8 +79,8 @@ public class DraftManager
             _totalStoredOre += dailyOreOutput;
         }
 
-        return $"A day has passed.{Environment.NewLine}" +
-               $"Energy Provided: {dailyEnergyOutput}{Environment.NewLine}" +
+        return $"A day has passed.{OutputWriter.NewLine}" +
+               $"Energy Provided: {dailyEnergyOutput}{OutputWriter.NewLine}" +
                $"Plumbus Ore Mined: {dailyOreOutput}";
     }
 
@@ -119,8 +121,8 @@ public class DraftManager
 
     public string ShutDown()
     {
-        return $"System Shutdown{Environment.NewLine}" +
-               $"Total Energy Stored: {_totalStoredEnergy}{Environment.NewLine}" +
+        return $"System Shutdown{OutputWriter.NewLine}" +
+               $"Total Energy Stored: {_totalStoredEnergy}{OutputWriter.NewLine}" +
                $"Total Mined Plumbus Ore: {_totalStoredOre}";
     }
 }

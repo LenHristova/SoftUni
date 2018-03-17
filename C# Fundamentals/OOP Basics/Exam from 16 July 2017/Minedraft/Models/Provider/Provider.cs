@@ -1,6 +1,4 @@
-﻿using System;
-
-public abstract class Provider : Miner
+﻿public abstract class Provider : Miner
 {
     private const double MAX_ENERGY_OUTPUT = 9_999;
 
@@ -26,7 +24,7 @@ public abstract class Provider : Miner
 
     public override string ToString()
     {
-        return $"{Type} Provider - {Id}{Environment.NewLine}" +
+        return $"{Type} Provider - {Id}{OutputWriter.NewLine}" +
                $"Energy Output: {EnergyOutput}";
     }
 }

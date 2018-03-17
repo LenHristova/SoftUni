@@ -1,12 +1,10 @@
-﻿using System;
-
-public static class Validator
+﻿public static class Validator
 {
     public static void ValidateNotNegative(double value, string property)
     {
         if (value < 0)
         {
-            throw new ArgumentException("Value must be zero or positive", property);
+            throw new InvalidPropertyExeption("Value must be zero or positive", property);
         }
     }
 
@@ -14,7 +12,7 @@ public static class Validator
     {
         if (value <= 0)
         {
-            throw new ArgumentException("Value must be positive", property);
+            throw new InvalidPropertyExeption("Value must be positive", property);
         }
     }
 
@@ -22,7 +20,7 @@ public static class Validator
     {
         if (value > maxValue)
         {
-            throw new ArgumentException($"Given value: {value} is bigger then appropriate max value: {maxValue}", property);
+            throw new InvalidPropertyExeption($"Given value: {value} is bigger then appropriate max value: {maxValue}", property);
         }
     }
 
@@ -30,7 +28,7 @@ public static class Validator
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw new ArgumentException("Invalid string!", property);
+            throw new InvalidPropertyExeption("Invalid string!", property);
         }
     }
 }

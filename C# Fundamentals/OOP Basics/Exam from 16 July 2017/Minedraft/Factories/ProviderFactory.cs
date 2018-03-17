@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-public static class ProviderFactory
+public class ProviderFactory
 {
-    public static Provider CreateProvider(IList<string> parameters)
+    public Provider CreateProvider(IList<string> parameters)
     {
         var type = parameters[0];
         var id = parameters[1];
@@ -16,7 +15,7 @@ public static class ProviderFactory
             case "Pressure":
                 return new PressureProvider(id, energyOutput);
             default:
-                throw new NotSupportedException();
+                throw new InvalidCommandExeption();
         }
     }
 }

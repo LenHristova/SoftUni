@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-public static class HarvesterFactory
+public class HarvesterFactory
 {
-    public static Harvester CreateHarvester(IList<string> parameters)
+    public Harvester CreateHarvester(IList<string> parameters)
     {
         var type = parameters[0];
         var id = parameters[1];
@@ -18,7 +17,7 @@ public static class HarvesterFactory
             case "Hammer":
                 return new HammerHarvester(id, oreOutput, energyRequirement);
             default:
-                throw new NotSupportedException();
+                throw new InvalidCommandExeption();
         }
     }
 }
