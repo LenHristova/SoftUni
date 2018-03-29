@@ -1,12 +1,12 @@
-﻿using BashSoft.Exceptions;
-using BashSoft.Judge;
-using BashSoft.Repository;
+﻿using BashSoft.Contracts;
+using BashSoft.Exceptions;
 
 namespace BashSoft.IO.Commands
 {
-    public class TraverseFoldersCommand : Command
+    public class TraverseFoldersCommand : Command, IExecutable
     {
-        public TraverseFoldersCommand(string input, string[] data, Tester judge, StudentsRepository repository, IOManager inputOutputManager) : base(input, data, judge, repository, inputOutputManager)
+        public TraverseFoldersCommand(string input, string[] data, IContentComparer judge, IDatabase repository, IDirectoryManager inputOutputManager) 
+            : base(input, data, judge, repository, inputOutputManager)
         {
         }
 
@@ -23,7 +23,6 @@ namespace BashSoft.IO.Commands
                         InputOutputManager.TraverseDirectory(depth);
                         break;
                     }
-
                 case 2:
                     {
                         //check if second element is a number
@@ -34,7 +33,6 @@ namespace BashSoft.IO.Commands
                         InputOutputManager.TraverseDirectory(depth);
                         break;
                     }
-
                 default:
                 {
                     throw new InvalidCommandException(Input);

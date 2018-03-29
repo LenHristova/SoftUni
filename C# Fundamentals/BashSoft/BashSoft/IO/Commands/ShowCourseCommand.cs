@@ -1,12 +1,12 @@
-﻿using BashSoft.Exceptions;
-using BashSoft.Judge;
-using BashSoft.Repository;
+﻿using BashSoft.Contracts;
+using BashSoft.Exceptions;
 
 namespace BashSoft.IO.Commands
 {
-    public class ShowCourseCommand : Command
+    public class ShowCourseCommand : Command, IExecutable
     {
-        public ShowCourseCommand(string input, string[] data, Tester judge, StudentsRepository repository, IOManager inputOutputManager) : base(input, data, judge, repository, inputOutputManager)
+        public ShowCourseCommand(string input, string[] data, IContentComparer judge, IDatabase repository, IDirectoryManager inputOutputManager) 
+            : base(input, data, judge, repository, inputOutputManager)
         {
         }
 
@@ -23,7 +23,6 @@ namespace BashSoft.IO.Commands
                         Repository.GetAllStudentsFromCourse(courseName);
                         break;
                     }
-
                 case 3:
                     {
                         var courseName = Data[1];
@@ -31,7 +30,6 @@ namespace BashSoft.IO.Commands
                         Repository.GetStudentScoresFromCourse(courseName, studentUsername);
                         break;
                     }
-
                 default:
                 {
                     throw new InvalidCommandException(Input);

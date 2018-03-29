@@ -1,12 +1,11 @@
-﻿using BashSoft.Exceptions;
-using BashSoft.Judge;
-using BashSoft.Repository;
+﻿using BashSoft.Contracts;
+using BashSoft.Exceptions;
 
 namespace BashSoft.IO.Commands
 {
-    public class PrintFilteredStudentsCommand : Command
+    public class PrintFilteredStudentsCommand : Command, IExecutable
     {
-        public PrintFilteredStudentsCommand(string input, string[] data, Tester judge, StudentsRepository repository, IOManager inputOutputManager) : base(input, data, judge, repository, inputOutputManager)
+        public PrintFilteredStudentsCommand(string input, string[] data, IContentComparer judge, IDatabase repository, IDirectoryManager inputOutputManager) : base(input, data, judge, repository, inputOutputManager)
         {
         }
 
@@ -32,7 +31,7 @@ namespace BashSoft.IO.Commands
         {
             if (takeCommand != "take")
             {
-                throw new InvalidTakeQuantityPerameter();
+                throw new InvalidTakeQuantityParameter();
             }
 
             if (takeQuantity == "all")
@@ -44,7 +43,7 @@ namespace BashSoft.IO.Commands
                 var hasParsed = int.TryParse(takeQuantity, out var studentsToTake);
                 if (!hasParsed)
                 {
-                    throw new InvalidTakeQuantityPerameter();
+                    throw new InvalidTakeQuantityParameter();
                 }
 
                 Repository.FilterAndTake(courseName, filter, studentsToTake);

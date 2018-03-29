@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+
+using BashSoft.Contracts;
 using BashSoft.IO;
 using BashSoft.Static_data;
 
 namespace BashSoft.Repository
 {
-    public class RepositoryFilter
+    public class RepositoryFilter : IDataFilter
     {
         //Public API 
         public void FilterAndTake(Dictionary<string, double> studentsWithMarks,
@@ -15,13 +17,13 @@ namespace BashSoft.Repository
             switch (wantedFilter)
             {
                 case "excellent":
-                    FilterAndTake(studentsWithMarks, x => x >= 5, studentsToTake);
+                    this.FilterAndTake(studentsWithMarks, x => x >= 5, studentsToTake);
                     break;
                 case "average":
-                    FilterAndTake(studentsWithMarks, x => x < 5 && x >= 3.5, studentsToTake);
+                    this.FilterAndTake(studentsWithMarks, x => x < 5 && x >= 3.5, studentsToTake);
                     break;
                 case "poor":
-                    FilterAndTake(studentsWithMarks, x => x < 3.5, studentsToTake);
+                    this.FilterAndTake(studentsWithMarks, x => x < 3.5, studentsToTake);
                     break;
                 default:
                     throw new ArgumentException(ExceptionMessages.INVALID_STUDENT_FILTER);   

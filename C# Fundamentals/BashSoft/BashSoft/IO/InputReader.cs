@@ -1,22 +1,24 @@
 ﻿using System;
 
+using BashSoft.Contracts;
+
 namespace BashSoft.IO
 {
-    public class InputReader
+    public class InputReader : IReader
     {
         private const string END_COMMAND = "quit";
 
-        private readonly CommandInterpreter _interpreter;
+        private readonly IInterpreter _interpreter;
 
-        public InputReader(CommandInterpreter interpreter)
+        public InputReader(IInterpreter interpreter)
         {
-            _interpreter = interpreter;
+            this._interpreter = interpreter;
         }
 
         //Listening for commands and executes them if the syntax is correct
         public void StartReadingCommands()
         {
-            OutputWriter.WriteMessage($"{SessionData.currentPath}> ");
+            OutputWriter.WriteMessage($"{SessionData.CurrentPath}> ");
             string input;
             while ((input = Console.ReadLine()?.Trim()) != END_COMMAND)
             {
@@ -25,7 +27,7 @@ namespace BashSoft.IO
                     //Interpret command
                     _interpreter.InterpretCommand(input);
                 }
-                OutputWriter.WriteMessage($"{SessionData.currentPath}> ");
+                OutputWriter.WriteMessage($"{SessionData.CurrentPath}> ");
             }
         }
     }

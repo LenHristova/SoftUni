@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
+using BashSoft.Contracts;
 using BashSoft.IO;
 using BashSoft.Static_data;
 
 namespace BashSoft.Repository
 {
-    public class RepositorySorter
+    public class RepositorySorter : IDataSorter
     {
         //Public API
         public void OrderAndTake(Dictionary<string, double> studentsMarks,
@@ -17,14 +19,14 @@ namespace BashSoft.Repository
             {
                 //Order students ascending by grades and take wanted count of them
                 case "ascending":
-                    PrintStudents(studentsMarks
+                    this.PrintStudents(studentsMarks
                         .OrderBy(x => x.Value)
                         .Take(studentsToTake)
                         .ToDictionary(pair => pair.Key, pair => pair.Value));
                     break;
                 //Order students descending by grades and take wanted count of them
                 case "descending":
-                    PrintStudents(studentsMarks
+                    this.PrintStudents(studentsMarks
                         .OrderByDescending(x => x.Value)
                         .Take(studentsToTake)
                         .ToDictionary(pair => pair.Key, pair => pair.Value));

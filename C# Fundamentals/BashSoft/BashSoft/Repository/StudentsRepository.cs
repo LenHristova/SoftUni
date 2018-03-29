@@ -3,57 +3,60 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+
+using BashSoft.Contracts;
+using BashSoft.DataStructures;
 using BashSoft.Exceptions;
 using BashSoft.IO;
 using BashSoft.Models;
 
 namespace BashSoft.Repository
 {
-    public class StudentsRepository
+    public class StudentsRepository : IDatabase, IRequester, IFilteredTaker, IOrderedTaker
     {
-        private Dictionary<string, Course> _courses;
-        private Dictionary<string, Student> _students;
+        private Dictionary<string, ICourse> _courses;
+        private Dictionary<string, IStudent> _students;
         private bool _isDataInitialized;
-        private readonly RepositoryFilter _filter;
-        private readonly RepositorySorter _sorter;
+        private readonly IDataFilter _filter;
+        private readonly IDataSorter _sorter;
 
-        public StudentsRepository(RepositoryFilter filter, RepositorySorter sorter)
+        public StudentsRepository(IDataFilter filter, IDataSorter sorter)
         {
-            _filter = filter;
-            _sorter = sorter;
+            this._filter = filter;
+            this._sorter = sorter;
         }
 
         //Loading data if not yet
         public void LoadData(string fileName)
         {
-            if (_isDataInitialized)
+            if (this._isDataInitialized)
             {
                 throw new DataAlreadyInitializedException();
             }
 
             OutputWriter.WriteMessageOnNewLine("Reading data...");
-            _students = new Dictionary<string, Student>();
-            _courses = new Dictionary<string, Course>();
-            ReadData(fileName);
+            this._students = new Dictionary<string, IStudent>();
+            this._courses = new Dictionary<string, ICourse>();
+            this.ReadData(fileName);
         }
 
         //Unloading data if is initialized yet
         public void UnloadData()
         {
-            if (!_isDataInitialized)
+            if (!this._isDataInitialized)
             {
                 throw new DataNotInitializedException();
             }
 
-            _students = null;
-            _courses = null;
-            _isDataInitialized = false;
+            this._students = null;
+            this._courses = null;
+            this._isDataInitialized = false;
         }
 
         //Reads data from file and save it to the repo 
         private void ReadData(string fileName)
         {
-            var path = $"{SessionData.currentPath}\\{fileName}";
+            var path = $"{SessionData.CurrentPath}\\{fileName}";
             if (!File.Exists(path))
             {
                 throw new InvalidPathException();
@@ -102,15 +105,15 @@ namespace BashSoft.Repository
                     }
 
                     //Add student if doesn't exist in students' repo
-                    if (!_students.ContainsKey(username))
+                    if (!this._students.ContainsKey(username))
                     {
-                        _students.Add(username, new Student(username));
+                        this._students.Add(username, new Student(username));
                     }
 
                     //Add course if doesn't exist in courses' repo
-                    if (!_courses.ContainsKey(courseName))
+                    if (!this._courses.ContainsKey(courseName))
                     {
-                        _courses.Add(courseName, new Course(courseName));
+                        this._courses.Add(courseName, new Course(courseName));
                     }
 
                     var student = _students[username];
@@ -129,20 +132,20 @@ namespace BashSoft.Repository
                 }
             }
 
-            _isDataInitialized = true;
+            this._isDataInitialized = true;
             OutputWriter.WriteMessageOnNewLine("Data read!");
         }
 
         private bool IsQueryForCoursePossible(string courseName)
         {
             //Query for course is possible if data is initialized
-            if (!_isDataInitialized)
+            if (!this._isDataInitialized)
             {
                 throw new DataNotInitializedException();
             }
 
             //And query for course is possible if course exist in the repo
-            if (!_courses.ContainsKey(courseName))
+            if (!this._courses.ContainsKey(courseName))
             {
                 throw new InexistingCourseInDatabaseException();
             }
@@ -156,8 +159,8 @@ namespace BashSoft.Repository
             //Query for student is possible if data is initialized and current course exist in the repo ->
             //IsQueryForCoursePossible method do this check
             //And query for student is possible if student exist in the repo
-            if (IsQueryForCoursePossible(courseName) &&
-                _courses[courseName].StudentsByName.ContainsKey(studentUsername))
+            if (this.IsQueryForCoursePossible(courseName) &&
+                this._courses[courseName].StudentsByName.ContainsKey(studentUsername))
             {
                 return true;
             }
@@ -168,9 +171,9 @@ namespace BashSoft.Repository
         //Gets given student's scores from given course if query is possible
         public void GetStudentScoresFromCourse(string courseName, string studentUsername)
         {
-            if (IsQueryForStudentPossiblе(courseName, studentUsername))
+            if (this.IsQueryForStudentPossiblе(courseName, studentUsername))
             {
-                var studentMark = _courses[courseName]
+                var studentMark = this._courses[courseName]
                     .StudentsByName[studentUsername]
                     .MarksByCourses[courseName];
                 var student = new KeyValuePair<string, double>(studentUsername, studentMark);
@@ -178,15 +181,44 @@ namespace BashSoft.Repository
             }
         }
 
+        // Sort courses by given comparer
+        public ISimpleOrderedBag<ICourse> GetAllCoursesSorted(IComparer<ICourse> comparer)
+        {
+            if (!this._isDataInitialized)
+            {
+                throw new DataNotInitializedException();
+            }
+
+            var sortedCourses = new SimpleSortedList<ICourse>(comparer);
+            sortedCourses.AddAll(_courses.Values);
+
+            return sortedCourses;
+        }
+
+        // Sort students by given comparer
+        public ISimpleOrderedBag<IStudent> GetAllStudentsSorted(IComparer<IStudent> comparer)
+        {
+            if (!this._isDataInitialized)
+            {
+                throw new DataNotInitializedException();
+            }
+
+            var sortedStudents = new SimpleSortedList<IStudent>(comparer);
+            sortedStudents.AddAll(_students.Values);
+
+            return sortedStudents;
+
+        }
+
         //Gets all students from given course if query is possible
         public void GetAllStudentsFromCourse(string courseName)
         {
-            if (IsQueryForCoursePossible(courseName))
+            if (this.IsQueryForCoursePossible(courseName))
             {
                 OutputWriter.WriteMessageOnNewLine($"{courseName}:");
-                foreach (var student in _courses[courseName].StudentsByName)
+                foreach (var student in this._courses[courseName].StudentsByName)
                 {
-                    GetStudentScoresFromCourse(courseName, student.Key);
+                    this.GetStudentScoresFromCourse(courseName, student.Key);
                 }
             }
         }
@@ -196,10 +228,10 @@ namespace BashSoft.Repository
         {
             //Query is possible if data is initialized and current course exist in the repo ->
             //IsQueryForCoursePossible method do this check
-                if (IsQueryForCoursePossible(courseName))
+            if (this.IsQueryForCoursePossible(courseName))
             {
-                var studentsMarks = GetStudentsMarks(courseName, ref studentsToTake);
-                _filter.FilterAndTake(studentsMarks, givenFilter, studentsToTake.Value);
+                var studentsMarks = this.GetStudentsMarks(courseName, ref studentsToTake);
+                this._filter.FilterAndTake(studentsMarks, givenFilter, studentsToTake.Value);
             }
         }
 
@@ -208,10 +240,10 @@ namespace BashSoft.Repository
         {
             //Query is possible if data is initialized and current course exist in the repo ->
             //IsQueryForCoursePossible method do this check
-            if (IsQueryForCoursePossible(courseName))
+            if (this.IsQueryForCoursePossible(courseName))
             {
-                var studentsMarks = GetStudentsMarks(courseName, ref studentsToTake);
-                _sorter.OrderAndTake(studentsMarks, comparison, studentsToTake.Value);
+                var studentsMarks = this.GetStudentsMarks(courseName, ref studentsToTake);
+                this._sorter.OrderAndTake(studentsMarks, comparison, studentsToTake.Value);
             }
         }
 
@@ -220,10 +252,10 @@ namespace BashSoft.Repository
             //If count of students to take is not given -> take all
             if (studentsToTake == null)
             {
-                studentsToTake = _courses[courseName].StudentsByName.Count;
+                studentsToTake = this._courses[courseName].StudentsByName.Count;
             }
 
-            var studentsMarks = _courses[courseName].StudentsByName
+            var studentsMarks = this._courses[courseName].StudentsByName
                 .ToDictionary(x => x.Key, x => x.Value.MarksByCourses[courseName]);
             return studentsMarks;
         }

@@ -1,21 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+
+using BashSoft.Contracts;
 using BashSoft.Exceptions;
 using BashSoft.Static_data;
 
 namespace BashSoft.IO
 {
-    public class IOManager
+    public class IOManager : IDirectoryManager
     {
         //Traverses the current directory and the subdirectories to the required depth 
         //and writes their paths and the names of the files in each directory
         public void TraverseDirectory(int depth)
         {
             OutputWriter.WriteEmptyLine();
-            var initialIdentation = SessionData.currentPath.Split('\\').Length;
+            var initialIdentation = SessionData.CurrentPath.Split('\\').Length;
             var subFolders = new Queue<string>();
-            subFolders.Enqueue(SessionData.currentPath);
+            subFolders.Enqueue(SessionData.CurrentPath);
 
             //Traversal stops when have no subfolders or required depth is reached
             while (subFolders.Count != 0)
@@ -58,7 +60,7 @@ namespace BashSoft.IO
         {
             try
             {
-                var path = SessionData.currentPath + "\\" + name;
+                var path = SessionData.CurrentPath + "\\" + name;
                 Directory.CreateDirectory(path);
             }
             catch (ArgumentException)
@@ -74,10 +76,10 @@ namespace BashSoft.IO
             {
                 try
                 {
-                    var currentPath = SessionData.currentPath;
+                    var currentPath = SessionData.CurrentPath;
                     var indexOfLastSlash = currentPath.LastIndexOf("\\");
                     var newPath = currentPath.Substring(0, indexOfLastSlash);
-                    SessionData.currentPath = newPath;
+                    SessionData.CurrentPath = newPath;
                 }
                 catch (ArgumentOutOfRangeException)
                 {
@@ -87,7 +89,7 @@ namespace BashSoft.IO
             // or else down in the directory tree
             else
             {
-                var currentPath = SessionData.currentPath;
+                var currentPath = SessionData.CurrentPath;
                 currentPath += "\\" + realitivePath;
                 ChangeCurrentDirectoryAbsolute(currentPath);
             }
@@ -100,7 +102,7 @@ namespace BashSoft.IO
                 throw new InvalidPathException();
             }
 
-            SessionData.currentPath = absolutePath;
+            SessionData.CurrentPath = absolutePath;
         }
     }
 }

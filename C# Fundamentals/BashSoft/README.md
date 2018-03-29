@@ -77,3 +77,8 @@ ________________________________________________________________________
   		absolute path of the first file + 
   		absolute path of the second file 
 ------------------------------------------------------------------------  
+
+  13. Display students/courses ascending/descending by name (if data exist):
+  ENTER "display" command + wanted data to sort + wanted sort type
+  Example: display courses ascending
+  Example: display students descending

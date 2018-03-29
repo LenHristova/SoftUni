@@ -1,12 +1,14 @@
 ﻿using System;
 using System.IO;
+
+using BashSoft.Contracts;
 using BashSoft.Exceptions;
 using BashSoft.IO;
 using BashSoft.Static_data;
 
 namespace BashSoft.Judge
 {
-    public class Tester
+    public class Tester : IContentComparer
     {
         //Compares contents from user output and expected output
         public void CompareContent(string userOutputPath, string expectedOutputPath)
@@ -24,7 +26,7 @@ namespace BashSoft.Judge
                 var mismatches = GetLinesWithPossibleMismatches(
                     actualOutputLines, expectedOutputLines, out var hasMismatches);
 
-                PrintOutput(mismatches, hasMismatches, mismatchPath);
+                this.PrintOutput(mismatches, hasMismatches, mismatchPath);
                 OutputWriter.WriteMessageOnNewLine("Files read!");
             }
             catch (IOException)

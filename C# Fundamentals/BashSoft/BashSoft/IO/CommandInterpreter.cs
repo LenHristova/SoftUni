@@ -1,22 +1,22 @@
 ﻿using System;
+
+using BashSoft.Contracts;
 using BashSoft.Exceptions;
 using BashSoft.IO.Commands;
-using BashSoft.Judge;
-using BashSoft.Repository;
 
 namespace BashSoft.IO
 {
-    public class CommandInterpreter
+    public class CommandInterpreter : IInterpreter
     {
-        private readonly Tester _judge;
-        private readonly StudentsRepository _repository;
-        private readonly IOManager _inputOutputManager;
+        private readonly IContentComparer _judge;
+        private readonly IDatabase _repository;
+        private readonly IDirectoryManager _inputOutputManager;
 
-        public CommandInterpreter(Tester judge, StudentsRepository repository, IOManager inputOutputManager)
+        public CommandInterpreter(IContentComparer judge, IDatabase repository, IDirectoryManager inputOutputManager)
         {
-            _judge = judge;
-            _repository = repository;
-            _inputOutputManager = inputOutputManager;
+            this._judge = judge;
+            this._repository = repository;
+            this._inputOutputManager = inputOutputManager;
         }
 
         public void InterpretCommand(string input)
@@ -35,7 +35,7 @@ namespace BashSoft.IO
         }
 
         //Directs command IF is valid
-        private Command ParseCommand(string input, string[] data, string command)
+        private IExecutable ParseCommand(string input, string[] data, string command)
         {
             switch (command.ToLower())
             {
@@ -61,6 +61,8 @@ namespace BashSoft.IO
                     return new PrintFilteredStudentsCommand(input, data, _judge, _repository, _inputOutputManager);
                 case "order":
                     return new PrintOrderedStudentsCommand(input, data, _judge, _repository, _inputOutputManager);
+                case "display":
+                    return new DisplayCommand(input, data, _judge, _repository, _inputOutputManager);
                 case "decorder":
                     throw new NotImplementedException();
                 case "download":
@@ -69,9 +71,9 @@ namespace BashSoft.IO
                     throw new NotImplementedException();
                 case "dropdb":
                     return new DropDatabaseCommand(input, data, _judge, _repository, _inputOutputManager);
+                default:
+                    throw new InvalidCommandException(input);
             }
-
-            throw new InvalidCommandException(input);
         }
     }
 }

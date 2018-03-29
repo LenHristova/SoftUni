@@ -1,12 +1,11 @@
-﻿using BashSoft.Exceptions;
-using BashSoft.Judge;
-using BashSoft.Repository;
+﻿using BashSoft.Contracts;
+using BashSoft.Exceptions;
 
 namespace BashSoft.IO.Commands
 {
-    public class CompareFilesCommand : Command
+    public class CompareFilesCommand : Command, IExecutable
     {
-        public CompareFilesCommand(string input, string[] data, Tester judge, StudentsRepository repository, IOManager inputOutputManager) 
+        public CompareFilesCommand(string input, string[] data, IContentComparer judge, IDatabase repository, IDirectoryManager inputOutputManager) 
             : base(input, data, judge, repository, inputOutputManager)
         {
         }

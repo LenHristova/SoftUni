@@ -1,12 +1,12 @@
-﻿using BashSoft.Exceptions;
-using BashSoft.Judge;
-using BashSoft.Repository;
+﻿using BashSoft.Contracts;
+using BashSoft.Exceptions;
 
 namespace BashSoft.IO.Commands
 {
-    public class PrintOrderedStudentsCommand : Command
+    public class PrintOrderedStudentsCommand : Command, IExecutable
     {
-        public PrintOrderedStudentsCommand(string input, string[] Data, Tester judge, StudentsRepository repository, IOManager inputOutputManager) : base(input, Data, judge, repository, inputOutputManager)
+        public PrintOrderedStudentsCommand(string input, string[] data, IContentComparer judge, IDatabase repository, IDirectoryManager inputOutputManager) 
+            : base(input, data, judge, repository, inputOutputManager)
         {
         }
 
@@ -16,7 +16,7 @@ namespace BashSoft.IO.Commands
         {
             if (Data.Length != 5)
             {
-                throw new InvalidTakeQuantityPerameter();
+                throw new InvalidTakeQuantityParameter();
             }
 
             var courseName = Data[1];
@@ -32,19 +32,19 @@ namespace BashSoft.IO.Commands
         {
             if (takeCommand != "take")
             {
-                throw new InvalidTakeQuantityPerameter();
+                throw new InvalidTakeQuantityParameter();
             }
 
             if (takeQuantity == "all")
             {
-                Repository.OrderAndTake(courseName, orderType);
+                this.Repository.OrderAndTake(courseName, orderType);
             }
             else
             {
                 var hasParsed = int.TryParse(takeQuantity, out var studentsToTake);
                 if (!hasParsed)
                 {
-                    throw new InvalidTakeQuantityPerameter();
+                    throw new InvalidTakeQuantityParameter();
                 }
 
                 Repository.OrderAndTake(courseName, orderType, studentsToTake);

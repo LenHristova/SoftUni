@@ -1,19 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
+using BashSoft.Contracts;
 using BashSoft.Exceptions;
 
 namespace BashSoft.Models
 {
-    public class Student
+    public class Student : IStudent
     {
         private string _username;
-        private readonly Dictionary<string, Course> _enrolledCourses;
+        private readonly Dictionary<string, ICourse> _enrolledCourses;
         private readonly Dictionary<string, double> _marksByCourses;
 
         public Student(string username)
         {
             Username = username;
-            _enrolledCourses = new Dictionary<string, Course>();
+            _enrolledCourses = new Dictionary<string, ICourse>();
             _marksByCourses = new Dictionary<string, double>();
         }
 
@@ -31,11 +33,11 @@ namespace BashSoft.Models
             }
         }
 
-        public IReadOnlyDictionary<string, Course> EnrolledCourses => _enrolledCourses;
+        public IReadOnlyDictionary<string, ICourse> EnrolledCourses => _enrolledCourses;
 
         public IReadOnlyDictionary<string, double> MarksByCourses => _marksByCourses;
 
-        public void EnrollInCourse(Course course)
+        public void EnrollInCourse(ICourse course)
         {
             if (_enrolledCourses.ContainsKey(course.Name))
             {
@@ -67,5 +69,9 @@ namespace BashSoft.Models
             var mark = persentageOfSolvedExam * 4 + 2;
             return mark;
         }
+
+        public int CompareTo(IStudent other) => Username.CompareTo(other.Username);
+
+        public override string ToString() => Username;
     }
 }
