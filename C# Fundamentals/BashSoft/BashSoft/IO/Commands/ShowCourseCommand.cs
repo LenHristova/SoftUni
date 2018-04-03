@@ -1,12 +1,17 @@
-﻿using BashSoft.Contracts;
+﻿using BashSoft.Attributes;
+using BashSoft.Contracts;
 using BashSoft.Exceptions;
 
 namespace BashSoft.IO.Commands
 {
+    [Alias("show")]
     public class ShowCourseCommand : Command, IExecutable
     {
-        public ShowCourseCommand(string input, string[] data, IContentComparer judge, IDatabase repository, IDirectoryManager inputOutputManager) 
-            : base(input, data, judge, repository, inputOutputManager)
+        [Inject]
+        private readonly IDatabase _repository;
+
+        public ShowCourseCommand(string input, string[] data) 
+            : base(input, data)
         {
         }
 
@@ -20,14 +25,14 @@ namespace BashSoft.IO.Commands
                 case 2:
                     {
                         var courseName = Data[1];
-                        Repository.GetAllStudentsFromCourse(courseName);
+                        _repository.GetAllStudentsFromCourse(courseName);
                         break;
                     }
                 case 3:
                     {
                         var courseName = Data[1];
                         var studentUsername = Data[2];
-                        Repository.GetStudentScoresFromCourse(courseName, studentUsername);
+                        _repository.GetStudentScoresFromCourse(courseName, studentUsername);
                         break;
                     }
                 default:

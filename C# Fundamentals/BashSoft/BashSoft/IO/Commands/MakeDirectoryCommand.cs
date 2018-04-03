@@ -1,12 +1,17 @@
-﻿using BashSoft.Contracts;
+﻿using BashSoft.Attributes;
+using BashSoft.Contracts;
 using BashSoft.Exceptions;
 
 namespace BashSoft.IO.Commands
 {
+    [Alias("mkdir")]
     public class MakeDirectoryCommand : Command, IExecutable
     {
-        public MakeDirectoryCommand(string input, string[] data, IContentComparer judge, IDatabase repository, IDirectoryManager inputOutputManager)
-            : base(input, data, judge, repository, inputOutputManager)
+        [Inject]
+        private readonly IDirectoryManager _inputOutputManager;
+
+        public MakeDirectoryCommand(string input, string[] data)
+            : base(input, data)
         {
         }
 
@@ -19,7 +24,7 @@ namespace BashSoft.IO.Commands
             }
 
             var folderName = Data[1];
-            InputOutputManager.CreateDirectoryInCurrentFolder(folderName);
+            _inputOutputManager.CreateDirectoryInCurrentFolder(folderName);
         }
     }
 }

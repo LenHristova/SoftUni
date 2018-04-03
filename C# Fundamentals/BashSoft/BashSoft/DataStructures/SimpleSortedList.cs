@@ -10,7 +10,7 @@ namespace BashSoft.DataStructures
     public class SimpleSortedList<T> : ISimpleOrderedBag<T>
     where T : IComparable<T>
     {
-        private const int DEFAULT_SIZE = 16;
+        private const int DEFAULT_CAPACITY = 16;
         private static Comparer<T> DefaultComparer() => Comparer<T>.Create((x, y) => x.CompareTo(y));
 
         private T[] _innerCollection;
@@ -27,11 +27,11 @@ namespace BashSoft.DataStructures
         {
         }
 
-        public SimpleSortedList(IComparer<T> comparer) : this(comparer, DEFAULT_SIZE)
+        public SimpleSortedList(IComparer<T> comparer) : this(comparer, DEFAULT_CAPACITY)
         {
         }
 
-        public SimpleSortedList() : this(DefaultComparer(), DEFAULT_SIZE)
+        public SimpleSortedList() : this(DefaultComparer(), DEFAULT_CAPACITY)
         {
         }
 
@@ -45,12 +45,28 @@ namespace BashSoft.DataStructures
             _innerCollection = new T[capacity];
         }
 
+        public int Capacity => _innerCollection.Length;
+
         public int Size { get; private set; }
 
+        public T this[int index]
+        {
+            get
+            {
+                if (index<0 || index >= Size)
+                {
+                    throw new IndexOutOfRangeException();
+                }
+
+                return _innerCollection[index];
+            }
+        }
 
         public void Add(T element)
         {
-            EnsureEnoughSize(Size);
+            EnsureNotNull(element);
+
+            EnsureEnoughCapacity(Size);
 
             _innerCollection[Size] = element;
             Size++;
@@ -62,7 +78,9 @@ namespace BashSoft.DataStructures
 
         public void AddAll(ICollection<T> collection)
         {
-            EnsureEnoughSize(Size + collection.Count);
+            EnsureNotNull(collection);
+
+            EnsureEnoughCapacity(Size + collection.Count);
 
             foreach (var element in collection)
             {
@@ -73,22 +91,63 @@ namespace BashSoft.DataStructures
             SortInnerCollection();
         }
 
-        private void EnsureEnoughSize(int neededSize)
+        private void EnsureEnoughCapacity(int neededCapacity)
         {
-            if (neededSize >= _innerCollection.Length)
+            if (neededCapacity >= _innerCollection.Length)
             {
-                var newSize = _innerCollection.Length * 2;
-                while (neededSize >= newSize)
+                var newCapacity = _innerCollection.Length * 2;
+                while (neededCapacity >= newCapacity)
                 {
-                    newSize *= 2;
+                    newCapacity *= 2;
                 }
 
-                Array.Resize(ref _innerCollection, newSize);
+                Array.Resize(ref _innerCollection, newCapacity);
+            }
+        }
+
+        public bool Remove(T element)
+        {
+            EnsureNotNull(element);
+
+            for (int index = 0; index < Size; index++)
+            {
+                if (_innerCollection[index].Equals(element))
+                {
+                    RemoveAt(index);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void RemoveAt(int index)
+        {
+            Size--;
+
+            for (int j = index; j < Size; j++)
+            {
+                _innerCollection[j] = _innerCollection[j + 1];
+            }
+
+            _innerCollection[Size] = default(T);
+
+            EnsureCapacityNotTooBig();
+        }
+
+        private void EnsureCapacityNotTooBig()
+        {
+            if (Size < _innerCollection.Length / 2
+                && Capacity > DEFAULT_CAPACITY)
+            {
+                Array.Resize(ref _innerCollection, _innerCollection.Length / 2);
             }
         }
 
         public string JoinWith(string joiner)
         {
+            EnsureNotNull(joiner);
+
             var sb = new StringBuilder();
 
             foreach (var element in this)
@@ -97,9 +156,16 @@ namespace BashSoft.DataStructures
                 sb.Append(joiner);
             }
 
-            sb.Remove(sb.Length - 1, 1);
-            //return sb.ToString().TrimEnd(joiner.ToCharArray());
+            sb.Remove(sb.Length - joiner.Length, joiner.Length);
             return sb.ToString();
+        }
+
+        private static void EnsureNotNull(object obj)
+        {
+            if (obj == null)
+            {
+                throw new ArgumentNullException();
+            }
         }
 
         public IEnumerator<T> GetEnumerator()

@@ -1,12 +1,17 @@
-﻿using BashSoft.Contracts;
+﻿using BashSoft.Attributes;
+using BashSoft.Contracts;
 using BashSoft.Exceptions;
 
 namespace BashSoft.IO.Commands
 {
+    [Alias("ls")]
     public class TraverseFoldersCommand : Command, IExecutable
     {
-        public TraverseFoldersCommand(string input, string[] data, IContentComparer judge, IDatabase repository, IDirectoryManager inputOutputManager) 
-            : base(input, data, judge, repository, inputOutputManager)
+        [Inject]
+        private readonly IDirectoryManager _inputOutputManager;
+
+        public TraverseFoldersCommand(string input, string[] data) 
+            : base(input, data)
         {
         }
 
@@ -20,7 +25,7 @@ namespace BashSoft.IO.Commands
                 case 1:
                     {
                         var depth = 0;
-                        InputOutputManager.TraverseDirectory(depth);
+                        _inputOutputManager.TraverseDirectory(depth);
                         break;
                     }
                 case 2:
@@ -30,7 +35,7 @@ namespace BashSoft.IO.Commands
                         if (!hasParsed)
                             throw new InvalidNumberException();
 
-                        InputOutputManager.TraverseDirectory(depth);
+                        _inputOutputManager.TraverseDirectory(depth);
                         break;
                     }
                 default:

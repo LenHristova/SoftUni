@@ -1,12 +1,17 @@
-﻿using BashSoft.Contracts;
+﻿using BashSoft.Attributes;
+using BashSoft.Contracts;
 using BashSoft.Exceptions;
 
 namespace BashSoft.IO.Commands
 {
+    [Alias("order")]
     public class PrintOrderedStudentsCommand : Command, IExecutable
     {
-        public PrintOrderedStudentsCommand(string input, string[] data, IContentComparer judge, IDatabase repository, IDirectoryManager inputOutputManager) 
-            : base(input, data, judge, repository, inputOutputManager)
+        [Inject]
+        private readonly IDatabase _repository;
+
+        public PrintOrderedStudentsCommand(string input, string[] data) 
+            : base(input, data)
         {
         }
 
@@ -37,7 +42,7 @@ namespace BashSoft.IO.Commands
 
             if (takeQuantity == "all")
             {
-                this.Repository.OrderAndTake(courseName, orderType);
+                _repository.OrderAndTake(courseName, orderType);
             }
             else
             {
@@ -47,7 +52,7 @@ namespace BashSoft.IO.Commands
                     throw new InvalidTakeQuantityParameter();
                 }
 
-                Repository.OrderAndTake(courseName, orderType, studentsToTake);
+                _repository.OrderAndTake(courseName, orderType, studentsToTake);
             }
         }
     }

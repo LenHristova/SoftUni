@@ -1,12 +1,17 @@
-﻿using BashSoft.Contracts;
+﻿using BashSoft.Attributes;
+using BashSoft.Contracts;
 using BashSoft.Exceptions;
 
 namespace BashSoft.IO.Commands
 {
+    [Alias("cmd")]
     public class CompareFilesCommand : Command, IExecutable
     {
-        public CompareFilesCommand(string input, string[] data, IContentComparer judge, IDatabase repository, IDirectoryManager inputOutputManager) 
-            : base(input, data, judge, repository, inputOutputManager)
+        [Inject]
+        private readonly IContentComparer _judge;
+
+        public CompareFilesCommand(string input, string[] data) 
+            : base(input, data)
         {
         }
 
@@ -22,7 +27,7 @@ namespace BashSoft.IO.Commands
             var firstPath = Data[1];
             var secondPath = Data[2];
 
-            Judge.CompareContent(firstPath, secondPath);
+            _judge.CompareContent(firstPath, secondPath);
         }
     }
 }
