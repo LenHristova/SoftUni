@@ -5,25 +5,26 @@ using BashSoft.Exceptions;
 namespace BashSoft.IO.Commands
 {
     [Alias("readdb")]
-    public class ReadDatabaseCommand : Command, IExecutable
+    public class ReadDatabaseCommand : IExecutable
     {
-        [Inject]
         private readonly IDatabase _repository;
 
-        public ReadDatabaseCommand(string input, string[] data) 
-            : base(input, data)
+        public ReadDatabaseCommand(IDatabase repository)
         {
+            _repository = repository;
         }
 
         //Reads database from file IF command consists 2 elements -> "readdb" command + file's name
-        public override void Execute()
+        public void Execute(params string[] args)
         {
-            if (Data.Length != 2)
+            var input = args[0];
+            var data = input.Split();
+            if (data.Length != 2)
             {
-                throw new InvalidCommandException(Input);
+                throw new InvalidCommandException(input);
             }
 
-            var fileName = Data[1];
+            var fileName = data[1];
             _repository.LoadData(fileName);
         }
     }

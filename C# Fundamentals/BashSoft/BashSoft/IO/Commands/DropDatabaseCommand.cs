@@ -5,22 +5,23 @@ using BashSoft.Exceptions;
 namespace BashSoft.IO.Commands
 {
     [Alias("dropdb")]
-    public class DropDatabaseCommand : Command, IExecutable
+    public class DropDatabaseCommand : IExecutable
     {
-        [Inject]
         private readonly IDatabase _repository;
 
-        public DropDatabaseCommand(string input, string[] data) 
-            : base(input, data)
+        public DropDatabaseCommand(IDatabase repository)
         {
+            _repository = repository;
         }
 
         //Drops database IF command consist exactly 1 element -> "dropdb" command
-        public override void Execute()
+        public void Execute(params string[] args)
         {
-            if (Data.Length != 1)
+            var input = args[0];
+            var data = input.Split();
+            if (data.Length != 1)
             {
-                throw new InvalidCommandException(Input);
+                throw new InvalidCommandException(input);
             }
 
             _repository.UnloadData();

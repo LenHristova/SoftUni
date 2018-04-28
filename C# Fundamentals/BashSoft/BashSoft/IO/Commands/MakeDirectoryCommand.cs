@@ -5,25 +5,26 @@ using BashSoft.Exceptions;
 namespace BashSoft.IO.Commands
 {
     [Alias("mkdir")]
-    public class MakeDirectoryCommand : Command, IExecutable
+    public class MakeDirectoryCommand : IExecutable
     {
-        [Inject]
         private readonly IDirectoryManager _inputOutputManager;
 
-        public MakeDirectoryCommand(string input, string[] data)
-            : base(input, data)
+        public MakeDirectoryCommand(IDirectoryManager inputOutputManager)
         {
+            _inputOutputManager = inputOutputManager;
         }
 
         //Creates directory IF data consist 2 elements -> "mkdir" command + directory's name
-        public override void Execute()
+        public void Execute(params string[] args)
         {
-            if (Data.Length != 2)
+            var input = args[0];
+            var data = input.Split();
+            if (data.Length != 2)
             {
-                throw new InvalidCommandException(Input);
+                throw new InvalidCommandException(input);
             }
 
-            var folderName = Data[1];
+            var folderName = data[1];
             _inputOutputManager.CreateDirectoryInCurrentFolder(folderName);
         }
     }

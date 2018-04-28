@@ -5,22 +5,23 @@ using BashSoft.Exceptions;
 namespace BashSoft.IO.Commands
 {
     [Alias("ls")]
-    public class TraverseFoldersCommand : Command, IExecutable
+    public class TraverseFoldersCommand : IExecutable
     {
-        [Inject]
         private readonly IDirectoryManager _inputOutputManager;
 
-        public TraverseFoldersCommand(string input, string[] data) 
-            : base(input, data)
+        public TraverseFoldersCommand(IDirectoryManager inputOutputManager)
         {
+            _inputOutputManager = inputOutputManager;
         }
 
         //Traverses directory. Valid input (data) consists 1 or 2 elements
         //1 element -> "ls" command (default depth is 0)
         //2 element -> "ls" command + depth
-        public override void Execute()
+        public void Execute(params string[] args)
         {
-            switch (Data.Length)
+            var input = args[0];
+            var data = input.Split();
+            switch (data.Length)
             {
                 case 1:
                     {
@@ -31,7 +32,7 @@ namespace BashSoft.IO.Commands
                 case 2:
                     {
                         //check if second element is a number
-                        var hasParsed = int.TryParse(Data[1], out var depth);
+                        var hasParsed = int.TryParse(data[1], out var depth);
                         if (!hasParsed)
                             throw new InvalidNumberException();
 
@@ -40,7 +41,7 @@ namespace BashSoft.IO.Commands
                     }
                 default:
                 {
-                    throw new InvalidCommandException(Input);
+                    throw new InvalidCommandException(input);
                 }
             }
         }

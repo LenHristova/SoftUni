@@ -5,29 +5,30 @@ using BashSoft.Exceptions;
 namespace BashSoft.IO.Commands
 {
     [Alias("filter")]
-    public class PrintFilteredStudentsCommand : Command, IExecutable
+    public class PrintFilteredStudentsCommand : IExecutable
     {
-        [Inject]
         private readonly IDatabase _repository;
 
-        public PrintFilteredStudentsCommand(string input, string[] data) 
-            : base(input, data)
+        public PrintFilteredStudentsCommand(IDatabase repository)
         {
+            _repository = repository;
         }
 
         //Filters and takes students IF data consists 5 elements ->
         // "filter" command + courseName + filter + takeCommand + takeQuantity
-        public override void Execute()
+        public void Execute(params string[] args)
         {
-            if (Data.Length != 5)
+            var input = args[0];
+            var data = input.Split();
+            if (data.Length != 5)
             {
-                throw new InvalidCommandException(Input);
+                throw new InvalidCommandException(input);
             }
 
-            var courseName = Data[1];
-            var filter = Data[2].ToLower();
-            var takeCommand = Data[3].ToLower();
-            var takeQuantity = Data[4].ToLower();
+            var courseName = data[1];
+            var filter = data[2].ToLower();
+            var takeCommand = data[3].ToLower();
+            var takeQuantity = data[4].ToLower();
 
             TryParseParametersForFilterAndTake(takeCommand, takeQuantity, courseName, filter);
         }

@@ -2,6 +2,6 @@
 {
     public interface IExecutable
     {
-        void Execute();
+        void Execute(params string[] args);
     }
 }

@@ -5,25 +5,27 @@ using BashSoft.Exceptions;
 namespace BashSoft.IO.Commands
 {
     [Alias("cdrel")]
-    public class ChangeRelativePathCommand : Command, IExecutable
+    public class ChangeRelativePathCommand : IExecutable
     {
-        [Inject]
         private readonly IDirectoryManager _inputOutputManager;
 
-        public ChangeRelativePathCommand(string input, string[] data) 
-            : base(input, data)
+        public ChangeRelativePathCommand(IDirectoryManager inputOutputManager)
         {
+            _inputOutputManager = inputOutputManager;
         }
 
         //Changes path relatively IF data consists 2 elements -> "cdrel" command + relative path
-        public override void Execute()
+
+        public void Execute(params string[] args)
         {
-            if (Data.Length != 2)
+            var input = args[0];
+            var data = input.Split();
+            if (data.Length != 2)
             {
-                throw new InvalidCommandException(Input);
+                throw new InvalidCommandException(input);
             }
 
-            var relPath = Data[1];
+            var relPath = data[1];
             _inputOutputManager.ChangeCurrentDirectoryRelative(relPath);
         }
     }

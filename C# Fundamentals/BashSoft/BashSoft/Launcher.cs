@@ -1,6 +1,12 @@
-﻿using BashSoft.IO;
+﻿using System;
+
+using BashSoft.Contracts;
+using BashSoft.Factories;
+using BashSoft.IO;
 using BashSoft.Judge;
 using BashSoft.Repository;
+
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BashSoft
 {
@@ -8,13 +14,27 @@ namespace BashSoft
     {
         static void Main()
         {
-            var tester = new Tester();
-            var ioManager = new IOManager();
-            var repository = new StudentsRepository(new RepositoryFilter(), new RepositorySorter());
+            var serviceProvider = ConfigureServices();
 
-            var currentInterpreter = new CommandInterpreter(tester, repository, ioManager);
-            var reader = new InputReader(currentInterpreter);
+            var reader = serviceProvider.GetService<IReader>();
             reader.StartReadingCommands();
+        }
+
+        private static IServiceProvider ConfigureServices()
+        {
+            var services = new ServiceCollection();
+
+            services.AddSingleton<IDatabase, StudentsRepository>();
+            services.AddTransient<IDataFilter, RepositoryFilter>();
+            services.AddTransient<IDataSorter, RepositorySorter>();
+            services.AddSingleton<ICommandFactory, CommandFactory>();
+            services.AddSingleton<IReader, InputReader>();
+            services.AddSingleton<IInterpreter, CommandInterpreter>();
+            services.AddTransient<IDirectoryManager, IOManager>();
+            services.AddTransient<IContentComparer, Tester>();
+
+            var serviceProvider = services.BuildServiceProvider();
+            return serviceProvider;
         }
     }
 }

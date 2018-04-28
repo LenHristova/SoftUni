@@ -5,19 +5,20 @@ using BashSoft.Exceptions;
 namespace BashSoft.IO.Commands
 {
     [Alias("help")]
-    public class GetHelpCommand : Command, IExecutable
+    public class GetHelpCommand : IExecutable
     {
-        public GetHelpCommand(string input, string[] data) 
-            : base(input, data)
+        public GetHelpCommand()
         {
         }
 
         //Shows help IF data consists 1 elements -> "help" command
-        public override void Execute()
+        public void Execute(params string[] args)
         {
-            if (Data.Length != 1)
+            var input = args[0];
+            var data = input.Split();
+            if (data.Length != 1)
             {
-                throw new InvalidCommandException(Input);
+                throw new InvalidCommandException(input);
             }
 
             DisplayHelp();

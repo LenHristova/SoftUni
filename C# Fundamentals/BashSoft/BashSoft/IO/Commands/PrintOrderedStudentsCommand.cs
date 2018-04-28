@@ -5,29 +5,30 @@ using BashSoft.Exceptions;
 namespace BashSoft.IO.Commands
 {
     [Alias("order")]
-    public class PrintOrderedStudentsCommand : Command, IExecutable
+    public class PrintOrderedStudentsCommand : IExecutable
     {
-        [Inject]
         private readonly IDatabase _repository;
 
-        public PrintOrderedStudentsCommand(string input, string[] data) 
-            : base(input, data)
+        public PrintOrderedStudentsCommand(IDatabase repository)
         {
+            _repository = repository;
         }
 
         //Orders and takes students IF Data consists 5 elements ->
         // "order" command + courseName + orderType + takeCommand + takeQuantity
-        public override void Execute()
+        public void Execute(params string[] args)
         {
-            if (Data.Length != 5)
+            var input = args[0];
+            var data = input.Split();
+            if (data.Length != 5)
             {
                 throw new InvalidTakeQuantityParameter();
             }
 
-            var courseName = Data[1];
-            var orderType = Data[2].ToLower();
-            var takeCommand = Data[3].ToLower();
-            var takeQuantity = Data[4].ToLower();
+            var courseName = data[1];
+            var orderType = data[2].ToLower();
+            var takeCommand = data[3].ToLower();
+            var takeQuantity = data[4].ToLower();
 
             TryParseParametersForOrderAndTake(takeCommand, takeQuantity, courseName, orderType);
         }

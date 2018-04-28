@@ -8,47 +8,48 @@ using BashSoft.Exceptions;
 namespace BashSoft.IO.Commands
 {
     [Alias("display")]
-    public class DisplayCommand : Command, IExecutable
+    public class DisplayCommand : IExecutable
     {
-        [Inject]
         private readonly IDatabase _repository;
 
-        public DisplayCommand(string input, string[] data)
-            : base(input, data)
+        public DisplayCommand(IDatabase repository)
         {
+            _repository = repository;
         }
 
         //Display database IF command consist 3 elements 
         //-> "display" command + entity to display ("students"/"courses") + order type ("ascending"/"descending")
-        public override void Execute()
+        public void Execute(params string[] args)
         {
-            if (Data.Length != 3)
+            var input = args[0];
+            var data = input.Split();
+            if (data.Length != 3)
             {
-                throw new InvalidCommandException(Input);
+                throw new InvalidCommandException(input);
             }
 
-            var entityToDisplay = Data[1];
-            var sortType = Data[2];
+            var entityToDisplay = data[1];
+            var sortType = data[2];
 
             if (entityToDisplay.Equals("students", StringComparison.OrdinalIgnoreCase))
             {
-                var studentsComparator = CreateComparator<IStudent>(sortType);
+                var studentsComparator = CreateComparator<IStudent>(sortType, input);
                 var list = _repository.GetAllStudentsSorted(studentsComparator);
                 OutputWriter.WriteMessageOnNewLine(list.JoinWith(Environment.NewLine));
             }
             else if (entityToDisplay.Equals("courses", StringComparison.OrdinalIgnoreCase))
             {
-                var courseComparator = CreateComparator<ICourse>(sortType);
+                var courseComparator = CreateComparator<ICourse>(sortType, input);
                 var list = _repository.GetAllCoursesSorted(courseComparator);
                 OutputWriter.WriteMessageOnNewLine(list.JoinWith(Environment.NewLine));
             }
             else
             {
-                throw new InvalidCommandException(Input);
+                throw new InvalidCommandException(input);
             }
         }
 
-        private IComparer<T> CreateComparator<T>(string sortType)
+        private IComparer<T> CreateComparator<T>(string sortType, string input)
             where T : IComparable<T>
         {
             if (sortType.Equals("ascending", StringComparison.OrdinalIgnoreCase))
@@ -61,7 +62,7 @@ namespace BashSoft.IO.Commands
                 return Comparer<T>.Create((first, second) => second.CompareTo(first));
             }
 
-            throw new InvalidCommandException(Input);
+            throw new InvalidCommandException(input);
         }
     }
 }
