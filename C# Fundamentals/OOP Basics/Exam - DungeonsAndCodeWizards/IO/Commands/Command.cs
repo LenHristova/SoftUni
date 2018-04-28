@@ -1,0 +1,9 @@
+﻿using DungeonsAndCodeWizards.Contracts;
+
+namespace DungeonsAndCodeWizards.IO.Commands
+{
+    public abstract class Command : ICommand
+    {
+        public abstract string Execute(params string[] args);
+    }
+}
