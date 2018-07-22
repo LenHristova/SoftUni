@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20180712220537_AddTables.cs" />
+    <Compile Remove="Migrations\20180712221414_Tables.cs" />
+    <Compile Remove="Migrations\20180712222406_ModifyTables.cs" />
+    <Compile Remove="Migrations\20180712222815_Test.cs" />
+    <Compile Remove="Migrations\20180712222949_Test.cs" />
+    <Compile Remove="Migrations\20180712223345_Test2.cs" />
+    <Compile Remove="Migrations\20180712223656_Test3.cs" />
+    <Compile Remove="Migrations\20180712225023_test2.cs" />
+    <Compile Remove="Migrations\20180712225126_test2.cs" />
+    <Compile Remove="Migrations\20180712225436_test3.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\P03_FootballBetting.Data.Models\P03_FootballBetting.Data.Models.csproj" />
+  </ItemGroup>
+
+</Project>
