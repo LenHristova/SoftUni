@@ -2,6 +2,6 @@
 {
     public class Config
     {
-        public const string ConnectionString = @"Server=LEN\SQLEXPRESS;Database=SoftUni;Integrated Security=True;";
+        public const string ConnectionString = @"Server=.;Database=SoftUni;Integrated Security=True;";
     }
 }

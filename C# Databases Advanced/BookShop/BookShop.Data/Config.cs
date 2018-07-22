@@ -2,6 +2,6 @@
 {
     public class Config
     {
-        public const string ConnectionString = @"Server=LEN\SQLEXPRESS;Database=BookShop;Integrated Security=True;";
+        public const string ConnectionString = @"Server=.;Database=BookShop;Integrated Security=True;";
     }
 }

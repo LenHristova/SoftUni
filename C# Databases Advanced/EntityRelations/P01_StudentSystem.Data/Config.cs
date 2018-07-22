@@ -2,6 +2,6 @@
 {
     public class Config
     {
-        public const string ConnectionString = "Server=LEN\\SQLEXPRESS;Database=StudentSystem;Integrated Security=True;";
+        public const string ConnectionString = "Server=.;Database=StudentSystem;Integrated Security=True;";
     }
 }
