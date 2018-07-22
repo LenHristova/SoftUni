@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20180713221318_AddTables.cs" />
+    <Compile Remove="Migrations\20180713223913_AddTables.cs" />
+    <Compile Remove="Migrations\20180713224302_AddTables.cs" />
+    <Compile Remove="Migrations\20180713230009_PaymentMethodsCheckConstraint.cs" />
+    <Compile Remove="Migrations\20180713231108_PaymentMethodsCheckConstraint.cs" />
+    <Compile Remove="Migrations\20180713232212_AddTables.cs" />
+    <Compile Remove="Migrations\20180713232351_AddPaymentMethodsConstraints.cs" />
+    <Compile Remove="Migrations\20180713232606_AddTables.cs" />
+    <Compile Remove="Migrations\20180713232921_AddPaymentMethodsConstraints.cs" />
+    <Compile Remove="Migrations\20180713233342_AddPaymentMethodsConstraints.cs" />
+    <Compile Remove="Migrations\20180714095856_AddTables.cs" />
+    <Compile Remove="Migrations\20180717170319_emailIndex.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="1.1.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\P01_BillsPaymentSystem.Data.Models\P01_BillsPaymentSystem.Data.Models.csproj" />
+  </ItemGroup>
+
+</Project>
