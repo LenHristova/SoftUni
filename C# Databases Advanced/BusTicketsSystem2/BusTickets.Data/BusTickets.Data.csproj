@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20180728160129_Tables.cs" />
+    <Compile Remove="Migrations\20180728161553_Tables.cs" />
+    <Compile Remove="Migrations\20180728161940_Tables.cs" />
+    <Compile Remove="Migrations\20180728165311_Tables.cs" />
+    <Compile Remove="Migrations\20180728171207_Tables.cs" />
+    <Compile Remove="Migrations\20180728171408_Tables.cs" />
+    <Compile Remove="Migrations\20180728172758_Tables.cs" />
+    <Compile Remove="Migrations\20180728173307_Tables.cs" />
+    <Compile Remove="Migrations\20180728173755_Tables.cs" />
+    <Compile Remove="Migrations\20180728174731_Tables.cs" />
+    <Compile Remove="Migrations\20180728175035_Tables.cs" />
+    <Compile Remove="Migrations\20180728180137_Tables.cs" />
+    <Compile Remove="Migrations\20180728205906_Tables.cs" />
+    <Compile Remove="Migrations\20180729012253_Tables.cs" />
+    <Compile Remove="Migrations\20180729112103_AddTables.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="1.1.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BusTickets.Models\BusTickets.Models.csproj" />
+  </ItemGroup>
+
+</Project>
