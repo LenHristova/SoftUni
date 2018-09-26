@@ -20,7 +20,8 @@
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseDatabaseMigration()
+            app
+                .UseDatabaseMigration()
                 .UseHtmlContentType()
                 .UseRequestHandlers()
                 .UseNotFoundHandler();
