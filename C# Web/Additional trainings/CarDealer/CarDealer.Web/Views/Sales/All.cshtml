@@ -1,0 +1,60 @@
+﻿@model SalesByPredicateModel
+
+@{
+    ViewData["Title"] = "All sales";
+}
+
+@{
+    var allOrderTypes = Enum.GetNames(typeof(SaleType));
+}
+
+@if (@Model.Sales.Any())
+{
+    <h1>@ViewData["Title"]</h1>
+
+    <ul class="nav navbar-light nav-fill">
+        @foreach (var type in allOrderTypes)
+        {
+            var display = string.Equals(type, Model.SaleType, StringComparison.CurrentCultureIgnoreCase)
+                ? "bg-dark active"
+                : "bg-light";
+
+            <li class="nav-item">
+                <a class="nav-link @display" href=/sales/@type.ToLower()>@type sales</a>
+            </li>
+        }
+    </ul>
+
+
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr class="thead-dark">
+                <th>ID</th>
+                <th>Car</th>
+                <th>Customer</th>
+                <th>Price without discount</th>
+                <th>Discount</th>
+                <th>Price with discount</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sale in Model.Sales)
+            {
+                <tr>
+                    <td>@sale.Id</td>
+                    <td><a href="/cars/@sale.Car.Id/parts" role="button">@sale.Car.Make (@sale.Car.Model)</a></td>
+                    <td><a href="/customers/@sale.Customer.Id" role="button">@sale.Customer.Name</a></td>
+                    <td>$@sale.CarPrice</td>
+                    <td>@(sale.Discount <= 0 ? "-" : sale.Discount * 100 + "%")</td>
+                    <td>@(sale.CarPriceWithDiscount == sale.CarPrice ? "-" : "$" + sale.CarPriceWithDiscount.ToString("F2"))</td>
+                    <td class="text-right"><a class="btn btn-info" href="/sales/details/@sale.Id" role="button">More info</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h1>No customers to show...</h1>
+}

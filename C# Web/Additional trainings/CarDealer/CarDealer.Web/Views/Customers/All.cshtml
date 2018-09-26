@@ -1,0 +1,53 @@
+﻿@model OrderedCustomersModel
+
+@{
+    ViewData["Title"] = "Ordered customers";
+}
+
+@{
+    var allOrderTypes = Enum.GetNames(typeof(OrderType)).Select(s => s.ToLower());
+}
+
+@if (@Model.Customers.Any())
+{
+    <h1>@ViewData["Title"]</h1>
+
+    <ul class="nav nav-fill">
+        @foreach (var type in allOrderTypes)
+        {
+            var display = string.Equals(type, Model.OrderType, StringComparison.CurrentCultureIgnoreCase)
+                ? "bg-dark active"
+                : "bg-light";
+
+            <li class="nav-item">
+                <a class="nav-link @display" href=/customers/all/@type>By birthday @type</a>
+            </li>
+        }
+    </ul>
+
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr class="thead-dark">
+                <th>Name</th>
+                <th>Birth date</th>
+                <th>Is young driver</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in Model.Customers)
+            {
+                <tr>
+                    <td>@customer.Name</td>
+                    <td>@customer.BirthDate.ToShortDateString()</td>
+                    <td>@(customer.IsYoungDriver ? "YES" : "NO")</td>
+                    <td class="text-right"><a class="btn btn-info" href="/customers/@customer.Id" role="button">Statistics</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h1>No customers to show...</h1>
+}

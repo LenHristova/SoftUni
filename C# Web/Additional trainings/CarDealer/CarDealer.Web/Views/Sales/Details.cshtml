@@ -1,0 +1,62 @@
+﻿@model SaleFullInfoModel
+
+@{
+    ViewData["Title"] = "Sale details";
+}
+
+<h1>@ViewData["Title"]</h1>
+<p><strong>Price without discount:</strong> $@Model.CarPrice</p>
+<p><strong>Discount:</strong> @(Model.Discount * 100)%</p>
+<p><strong>Final price:</strong> $@Model.CarPriceWithDiscount.ToString("F2")</p>
+<hr />
+
+<h4>Car details</h4>
+<p><strong>Make:</strong> @Model.Car.Make</p>
+<p><strong>Model:</strong> @Model.Car.Model</p>
+<p><strong>Traveled distance:</strong> @Model.Car.TraveledDistance km</p>
+
+@if (@Model.Car.Parts.Any())
+{
+    <h4>Car parts:</h4>
+    <table class="table table-hover table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var part in @Model.Car.Parts)
+            {
+                <tr>
+                    <td>@part.Name</td>
+                    <td>$@part.Price</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No parts to show...</p>
+}
+
+<h4>Customer details</h4>
+<table class="table table-hover table-striped">
+    <thead>
+    <tr class="thead-dark">
+        <th>Name</th>
+        <th>Birth date</th>
+        <th>Is young driver</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.Customer.Name</td>
+            <td>@Model.Customer.BirthDate.ToShortDateString()</td>
+            <td>@(Model.Customer.IsYoungDriver ? "YES" : "NO")</td>
+            <td class="text-right"><a class="btn btn-info" href="/customers/@Model.Customer.Id" role="button">Statistics</a></td>
+        </tr>
+    </tbody>
+</table>

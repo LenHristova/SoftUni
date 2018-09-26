@@ -1,0 +1,38 @@
+﻿@model SupplierWithPartsModel
+
+@{
+    ViewData["Title"] = "Supplier details";
+}
+
+<h1>@ViewData["Title"]</h1>
+<p><strong>Name:</strong> @Model.Name</p>
+<p><strong>Type:</strong> @Model.Type</p>
+<hr />
+<h4>Parts:</h4>
+
+@if (@Model.Parts.Any())
+{
+    <table class="table table-hover table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Available</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var part in @Model.Parts)
+        {
+            <tr>
+                <td>@part.Name</td>
+                <td>$@part.Price</td>
+                <td>@part.Quantity</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No parts to show...</p>
+}

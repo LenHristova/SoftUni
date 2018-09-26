@@ -1,0 +1,31 @@
+﻿@model IEnumerable<string>
+
+@{
+    ViewData["Title"] = "All cars' makes";
+}
+
+@if (@Model.Any())
+{
+    <h1>@ViewData["Title"]</h1>
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr class="thead-dark">
+                <th>Make</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var make in Model)
+            {
+                <tr>
+                    <td>@make</td>
+                    <td class="text-right"><a class="btn btn-info" href="/cars/@make" role="button">More info</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h1>No customers to show...</h1>
+}
