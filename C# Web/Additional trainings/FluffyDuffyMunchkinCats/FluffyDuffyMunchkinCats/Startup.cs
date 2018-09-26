@@ -10,8 +10,10 @@
     public class Startup
     {
         public void ConfigureServices(IServiceCollection services)
-            => services.AddDbContext<CatsContext>(options =>
-                options.UseSqlServer("Server=.;Database=Cats;Integrated Security=True;"));        
+        {
+            services.AddDbContext<CatsContext>(options =>
+                options.UseSqlServer("Server=.;Database=Cats;Integrated Security=True;"));
+        }       
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
