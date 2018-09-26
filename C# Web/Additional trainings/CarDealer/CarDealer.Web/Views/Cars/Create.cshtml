@@ -1,0 +1,37 @@
+﻿@model CarCreateModel
+
+@{
+    ViewData["Title"] = "Add car";
+}
+
+<section class="container container-fluid text-center col-md-6">
+    <h1>@ViewData["Title"]</h1>
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="Make"></label>
+            <input asp-for="Make" required class="form-control" placeholder="Enter make">
+            <span asp-validation-for="Make" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Model"></label>
+            <input asp-for="Model" required class="form-control" placeholder="Enter model">
+            <span asp-validation-for="Model" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="TraveledDistance"></label>
+            <input asp-for="TraveledDistance" min="0" class="form-control">
+            <span asp-validation-for="TraveledDistance" class="text-danger"></span>
+        </div>
+        <div class="dropdown">
+            <label asp-for="SelectedPartsIds"></label>
+            <select asp-for="SelectedPartsIds" asp-items="Model.Parts" multiple class="form-control"></select>
+            <small>*Hold "CTR" to select multiple parts</small>
+        </div>
+        <div class="btn btn-group-lg">
+            <a href="/cars/all" class="btn btn-outline-secondary">Dismiss</a>
+            <button type="submit" class="btn btn-outline-success">Add</button>
+        </div>
+    </form>
+</section>

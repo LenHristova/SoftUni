@@ -28,7 +28,7 @@
             }
 
             var isImporter = supplierType == SupplierType.Importer;
-            var supplierModels = this.suppliers.All(isImporter: isImporter);
+            var supplierModels = this.suppliers.AllByIsImporter(isImporter: isImporter);
 
             return View(new SuppliersByIsImporterOrLocal
             {

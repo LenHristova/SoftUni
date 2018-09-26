@@ -1,0 +1,11 @@
+﻿@model PartFullInfoModel
+
+@{
+    ViewData["Title"] = "Part details";
+}
+
+<h1>@ViewData["Title"]</h1>
+<p><strong>Name:</strong> @Model.Name</p>
+<p><strong>Price:</strong> $@Model.Price.ToString("F2")</p>
+<p><strong>Quantity:</strong> @Model.Quantity</p>
+<p><strong>Supplier:</strong> @Model.Supplier</p>

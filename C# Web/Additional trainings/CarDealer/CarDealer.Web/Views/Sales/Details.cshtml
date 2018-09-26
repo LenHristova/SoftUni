@@ -56,7 +56,7 @@ else
             <td>@Model.Customer.Name</td>
             <td>@Model.Customer.BirthDate.ToShortDateString()</td>
             <td>@(Model.Customer.IsYoungDriver ? "YES" : "NO")</td>
-            <td class="text-right"><a class="btn btn-info" href="/customers/@Model.Customer.Id" role="button">Statistics</a></td>
+            <td class="text-right"><a class="btn btn-outline-info" href="/customers/@Model.Customer.Id" role="button">Statistics</a></td>
         </tr>
     </tbody>
 </table>

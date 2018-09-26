@@ -5,8 +5,12 @@
 
     public interface ISupplierService
     {
-        IEnumerable<SupplierModel> All(bool isImporter);
+        IEnumerable<SupplierModel> AllByIsImporter(bool isImporter);
+
+        IEnumerable<SupplierBaseModel> All();
 
         SupplierWithPartsModel ById(int? id);
+
+        bool Exists(int id);
     }
 }

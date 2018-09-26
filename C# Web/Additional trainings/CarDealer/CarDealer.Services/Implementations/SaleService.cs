@@ -1,9 +1,5 @@
 ﻿namespace CarDealer.Services.Implementations
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Linq.Expressions;
     using Contracts;
     using Data;
     using Data.Models;
@@ -12,6 +8,10 @@
     using Models.Enums;
     using Models.Parts;
     using Models.Sales;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Linq.Expressions;
 
     public class SaleService : ISaleService
     {
@@ -72,7 +72,7 @@
                         Model = s.Car.Model,
                         TraveledDistance = s.Car.TraveledDistance,
                         Parts = s.Car.Parts
-                            .Select(p => new PartModel
+                            .Select(p => new PartBaseModel
                             {
                                 Name = p.Part.Name,
                                 Price = p.Part.Price
@@ -90,5 +90,20 @@
                     CarPrice = s.Car.Parts.Sum(p => p.Part.Price)
                 })
                 .FirstOrDefault();
+
+        public int Create(int customerId, int carId, double discount)
+        {
+            var sale = new Sale
+            {
+                CustomerId = customerId,
+                CarId = carId,
+                Discount = discount
+            };
+
+            this.db.Sales.Add(sale);
+            this.db.SaveChanges();
+
+            return sale.Id;
+        }
     }
 }

@@ -1,0 +1,36 @@
+﻿@model PartFullInfoModel
+
+@{
+    ViewData["Title"] = "Edit part";
+}
+
+<section class="container container-fluid text-center col-md-6">
+    <h1>@ViewData["Title"]</h1>
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" disabled class="form-control">
+        </div>
+        <div class="form-group">
+            <label asp-for="Price"></label>
+            <input asp-for="Price" class="form-control">
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Quantity"></label>
+            <input asp-for="Quantity" class="form-control">
+            <span asp-validation-for="Quantity" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Supplier"></label>
+            <input asp-for="Supplier" disabled class="form-control">
+        </div>
+
+        <div class="btn btn-group-lg">
+            <a href="/parts/all" class="btn btn-outline-secondary">Dismiss</a>
+            <button type="submit" class="btn btn-outline-success">Save</button>
+        </div>
+    </form>
+</section>

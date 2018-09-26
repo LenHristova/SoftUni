@@ -1,3 +1,48 @@
-﻿h1, h2, h3 {
-    padding: 15px;
+﻿main {
+    padding-top: 5%;
+}
+
+.navbar-right {
+    text-align: right;
+    float: right;
+}
+
+.page-link {
+    color: #4a5460;
+}
+
+.page-item.active .page-link {
+    background-color: #4a5460;
+    border-color: #4a5460;
+}
+
+.page-item.disabled .page-link {
+    color: #4a5460;
+}
+
+.w-35 {
+    width: 35%;
+}
+
+.w-45 {
+    width: 45%;
+}
+
+footer {
+    position:fixed;
+    left:0px;
+    bottom:0px;
+    height:30px;
+    width:100%;
+    color: azure;
+    background:#161515;
+}
+
+.nav-pills > li  {
+    width: 100%;
+}
+
+.nav-pills > li > a.active {
+    background-color: #4a5460 !important;
+    border: #292d32 solid 1px !important;
 }

@@ -4,14 +4,22 @@
     ViewData["Title"] = "All sales";
 }
 
+@if (User.Identity.IsAuthenticated)
+{
+    <h1 class="d-inline">@ViewData["Title"]</h1>
+    <a class="btn btn-success btn-lg d-inline float-right" href="/sales/add">Add sale</a><hr />
+}
+else
+{
+    <h1>@ViewData["Title"]</h1>
+}
+
 @{
     var allOrderTypes = Enum.GetNames(typeof(SaleType));
 }
 
 @if (@Model.Sales.Any())
 {
-    <h1>@ViewData["Title"]</h1>
-
     <ul class="nav navbar-light nav-fill">
         @foreach (var type in allOrderTypes)
         {
@@ -48,7 +56,7 @@
                     <td>$@sale.CarPrice</td>
                     <td>@(sale.Discount <= 0 ? "-" : sale.Discount * 100 + "%")</td>
                     <td>@(sale.CarPriceWithDiscount == sale.CarPrice ? "-" : "$" + sale.CarPriceWithDiscount.ToString("F2"))</td>
-                    <td class="text-right"><a class="btn btn-info" href="/sales/details/@sale.Id" role="button">More info</a></td>
+                    <td class="text-right"><a class="btn btn-outline-info" href="/sales/details/@sale.Id" role="button">Details</a></td>
                 </tr>
             }
         </tbody>

@@ -21,7 +21,8 @@
         [Route("all/{order}")]
         public IActionResult All(string order)
         {
-            var isValidOrderType = Enum.TryParse<OrderType>(order, true, out var orderType);
+            var isValidOrderType = Enum
+                .TryParse<OrderType>(order, true, out var orderType);
 
             if (!isValidOrderType)
             {
@@ -37,10 +38,71 @@
             });
         }
 
+        [Route("add")]
+        public IActionResult Create() => View();
+
+        [HttpPost("add")]
+        public IActionResult Create(CustomerFormModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            this.customers.Create(
+                model.Name,
+                model.BirthDate.Value,
+                model.IsYoungDriver);
+
+            return RedirectToAction(nameof(All), new { order = OrderType.Ascending });
+        }
+
+        [Route("edit/{id?}")]
+        public IActionResult Edit(int? id)
+        {
+            var customer = this.customers.ById(id);
+
+            if (customer == null)
+            {
+                return this.NotFoundView();
+            }
+
+            return View(new CustomerFormModel
+            {
+                Name = customer.Name,
+                BirthDate = customer.BirthDate,
+                IsYoungDriver = customer.IsYoungDriver
+            });
+        }
+
+        [HttpPost("edit/{id?}")]
+        public IActionResult Edit(int? id, CustomerFormModel model)
+        {
+            var exists = this.customers.Exists(id);
+
+            if (!exists)
+            {
+                return this.NotFoundView();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            this.customers.Edit(
+                id.Value,
+                model.Name,
+                model.BirthDate.Value,
+                model.IsYoungDriver);
+
+            return RedirectToAction(nameof(All), new { order = OrderType.Ascending });
+        }
+
         [Route("{id?}")]
         public IActionResult Details(int? id)
         {
-            var customer = this.customers.ById(id);
+            var customer = this.customers.SalesInfoById(id);
 
             if (customer == null)
             {

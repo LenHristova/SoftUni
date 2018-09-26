@@ -11,6 +11,6 @@
 
         public long TraveledDistance { get; set; }
 
-        public ICollection<PartModel> Parts { get; set; }
+        public ICollection<PartBaseModel> Parts { get; set; }
     }
 }

@@ -1,0 +1,27 @@
+﻿@model CustomerFormModel
+
+<section class="container container-fluid text-center col-md-6">
+    <h1>@ViewData["Title"]</h1>
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" required class="form-control" placeholder="Enter name">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="BirthDate"></label>
+            <input asp-for="BirthDate" type="date" class="form-control" placeholder="Enter birth date">
+            <span asp-validation-for="BirthDate" class="text-danger"></span>
+        </div>
+        <div class="form-group form-inline">
+            <input asp-for="IsYoungDriver" class="form-control">
+            <label asp-for="IsYoungDriver"></label>
+        </div>
+        <div class="btn btn-group-lg">
+            <a href="/customers/all/ascending" class="btn btn-outline-secondary">Dismiss</a>
+            <button type="submit" class="btn btn-outline-success">@ViewData["Submit"]</button>
+        </div>
+    </form>
+</section>

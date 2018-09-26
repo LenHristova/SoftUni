@@ -40,8 +40,13 @@
                 <tr>
                     <td>@customer.Name</td>
                     <td>@customer.BirthDate.ToShortDateString()</td>
-                    <td>@(customer.IsYoungDriver ? "YES" : "NO")</td>
-                    <td class="text-right"><a class="btn btn-info" href="/customers/@customer.Id" role="button">Statistics</a></td>
+                    <td>@(customer.IsYoungDriver ? "YES" : "NO")</td>   
+                    <td class="text-right">
+                        <div>
+                            <a class="btn btn-outline-warning" href="/customers/edit/@customer.Id" role="button">Edit</a>
+                            <a class="btn btn-outline-info" href="/customers/@customer.Id" role="button">Statistics</a>
+                        </div>
+                    </td>
                 </tr>
             }
         </tbody>

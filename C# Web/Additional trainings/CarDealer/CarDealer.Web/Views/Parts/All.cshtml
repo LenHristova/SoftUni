@@ -1,0 +1,46 @@
+﻿@model PartPageListModel
+
+@{
+    ViewData["Title"] = "All parts";
+}
+
+@if (@Model.Parts.Any())
+{
+    <h1>@ViewData["Title"]</h1>
+
+    @await Html.PartialAsync("_Pagination", Model.Pagination);
+
+    <table class="table table-hover table-striped">
+        <thead>
+        <tr class="thead-dark">
+            <th class="w-45">Name</th>
+            <th class="w-30">Price</th>
+            <th class="w-25"></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var part in Model.Parts)
+        {
+            <tr>
+                <td>@part.Name</td>
+                <td>$@part.Price.ToString("F2")</td>
+                <td class="text-right">
+                    <div>
+                        <a class="btn btn-outline-danger" href="/parts/delete/@part.Id" role="button">Delete</a>
+                        <a class="btn btn-outline-warning" href="/parts/edit/@part.Id" role="button">Edit</a>
+                        <a class="btn btn-outline-info" href="/parts/details/@part.Id" role="button">Details</a>
+                    </div>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+
+
+}
+else
+{
+    <h1>No parts to show...</h1>
+}
+@await Html.PartialAsync("_Pagination", Model.Pagination);

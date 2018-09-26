@@ -1,0 +1,8 @@
+﻿@model CustomerFormModel
+
+@{
+    ViewData["Title"] = "Add customer";
+    ViewData["Submit"] = "Add";
+}
+
+@await Html.PartialAsync("_CustomerForm", Model);

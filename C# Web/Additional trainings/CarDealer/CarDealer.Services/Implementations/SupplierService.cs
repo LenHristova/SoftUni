@@ -16,7 +16,7 @@
             this.db = db;
         }
 
-        public IEnumerable<SupplierModel> All(bool isImporter)
+        public IEnumerable<SupplierModel> AllByIsImporter(bool isImporter)
             => this.db.Suppliers
                 .Where(s => s.IsImporter == isImporter)
                 .Select(s => new SupplierModel
@@ -24,6 +24,16 @@
                     Id = s.Id,
                     Name = s.Name,
                     PartsCount = s.Parts.Count
+                })
+                .ToList();
+
+        public IEnumerable<SupplierBaseModel> All()
+            => this.db.Suppliers
+                .OrderBy(s => s.Name)
+                .Select(s => new SupplierBaseModel
+                {
+                    Id = s.Id,
+                    Name = s.Name
                 })
                 .ToList();
 
@@ -44,5 +54,9 @@
                         .ToList()
                 })
                 .FirstOrDefault();
+
+        public bool Exists(int id)
+            => this.db.Suppliers
+                .Any(s => s.Id == id);
     }
 }

@@ -1,12 +1,21 @@
 ﻿@model IEnumerable<string>
 
 @{
-    ViewData["Title"] = "All cars' makes";
+    ViewData["Title"] = "Car makes";
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    <h1 class="d-inline">@ViewData["Title"]</h1>
+    <a class="btn btn-success btn-lg d-inline float-right" href="/cars/add">Add car</a><hr />
+}
+else
+{
+    <h1>@ViewData["Title"]</h1>
 }
 
 @if (@Model.Any())
 {
-    <h1>@ViewData["Title"]</h1>
     <table class="table table-hover table-striped">
         <thead>
             <tr class="thead-dark">
@@ -19,7 +28,9 @@
             {
                 <tr>
                     <td>@make</td>
-                    <td class="text-right"><a class="btn btn-info" href="/cars/@make" role="button">More info</a></td>
+                    <td class="text-right">
+                        <a class="btn btn-outline-info" href="/cars/@make" role="button">All cars from the make</a>
+                    </td>
                 </tr>
             }
         </tbody>
