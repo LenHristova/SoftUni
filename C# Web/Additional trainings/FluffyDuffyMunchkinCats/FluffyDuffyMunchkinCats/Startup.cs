@@ -11,7 +11,7 @@
     {
         public void ConfigureServices(IServiceCollection services)
             => services.AddDbContext<CatsContext>(options =>
-                options.UseSqlServer("Server=LEN\\SQLEXPRESS;Database=Cats;Integrated Security=True;"));        
+                options.UseSqlServer("Server=.;Database=Cats;Integrated Security=True;"));        
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
