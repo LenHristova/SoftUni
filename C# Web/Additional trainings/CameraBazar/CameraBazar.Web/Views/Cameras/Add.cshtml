@@ -1,0 +1,145 @@
+﻿@model AddCameraViewModel
+
+@{
+    ViewData["Title"] = "Add camera";
+}
+<h2 class="text-center">@ViewData["Title"]</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">       
+        <section>
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <div class="text-right col-md-6">
+                        <label asp-for="Make"></label>
+                    </div>
+                    <div class="input-group col-md-6">
+                        <select asp-for="Make" asp-items="@Html.GetEnumSelectList<CameraMake>()" class="form-control"></select>
+                        <span asp-validation-for="Make" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="text-right col-md-6">
+                        <label asp-for="Model"></label>
+                    </div>
+                    <div class="input-group col-md-6">
+                        <input asp-for="Model" required pattern="[A-Z0-9-]+" class="form-control" />
+                        <span asp-validation-for="Model" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="text-right col-md-6">
+                        <label asp-for="Price"></label>
+                    </div>
+                    <div class="input-group col-md-6">
+                        <input asp-for="Price" required min="0" class="form-control" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="text-right col-md-6">
+                        <label asp-for="Quantity"></label>
+                    </div>
+                    <div class="input-group col-md-6">
+                        <input asp-for="Quantity" required min="0" max="100" class="form-control" />
+                        <span asp-validation-for="Quantity" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="text-right col-md-6">
+                        <label asp-for="MinShutterSpeed"></label>
+                    </div>
+                    <div class="input-group col-md-6">
+                        <input asp-for="MinShutterSpeed" required min="1" max="30" class="form-control" />
+                        <span asp-validation-for="MinShutterSpeed" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="text-right col-md-6">
+                        <label asp-for="MaxShutterSpeed"></label>
+                    </div>
+                    <div class="input-group col-md-6">
+                        <input asp-for="MaxShutterSpeed" required min="2000" max="8000" class="form-control" />
+                        <span asp-validation-for="MaxShutterSpeed" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="text-right col-md-6">
+                        <label asp-for="MinIso"></label>
+                    </div>
+                    <div class="input-group col-md-6">
+                        <select asp-for="MinIso" asp-items="@Html.GetEnumSelectList<MinIso>()" class="form-control"></select>
+                        <span asp-validation-for="MinIso" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="text-right col-md-6">
+                        <label asp-for="MaxIso"></label>
+                    </div>
+                    <div class="input-group col-md-6">
+                        <input asp-for="MaxIso" required min="200" max="409600" step="100" pattern="[0-9]+00" class="form-control" />
+                        <span asp-validation-for="MaxIso" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="text-right col-md-6">
+                        <label asp-for="IsFullFrame"></label>
+                    </div>
+                    <div class="input-group col-md-6">
+                        <input type="radio" asp-for="IsFullFrame" value="true" checked /> Yes
+                        <input type="radio" asp-for="IsFullFrame" value="false" /> No
+                        <span asp-validation-for="IsFullFrame" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="text-right col-md-6">
+                        <label asp-for="VideoResolution"></label>
+                    </div>
+                    <div class="input-group col-md-6">
+                        <input asp-for="VideoResolution" required class="form-control" />
+                        <span asp-validation-for="VideoResolution" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="text-right col-md-6">
+                        <label asp-for="LightMetering"></label>
+                    </div>
+                    <div class="input-group col-md-6">
+                        <input type="checkbox" name="LightMetering" class="checkbox-inline" value="@((int) LightMetering.Spot)" /> Spot
+                        <input type="checkbox" name="LightMetering" class="checkbox-inline" value="@((int) LightMetering.CenterWeighted)" />Center-Weighted
+                        <input type="checkbox" name="LightMetering" class="checkbox-inline" value="@((int) LightMetering.Evaluative)" /> Evaluative
+                        <br />
+                        <span asp-validation-for="LightMetering" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="text-right col-md-6">
+                        <label asp-for="Description"></label>
+                    </div>
+                    <div class="input-group col-md-6">
+                        <textarea asp-for="Description" required class="form-control"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="text-right col-md-6">
+                        <label asp-for="ImageUrl"></label>
+                    </div>
+                    <div class="input-group col-md-6">
+                        <input asp-for="ImageUrl" required pattern="http://.+|https://.+" class="form-control" />
+                        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group text-right">
+                    <button type="submit" class="btn btn-success btn-lg">Add</button>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

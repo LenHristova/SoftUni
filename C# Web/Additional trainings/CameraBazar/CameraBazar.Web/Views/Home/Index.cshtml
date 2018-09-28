@@ -1,0 +1,43 @@
+﻿@model CameraListingModel[]
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
+    <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner" role="listbox">
+        @{
+            var active = "active";
+
+            foreach (var camera in Model.Take(3))
+            {
+
+                <div class="item @active col-md-12 img-carousel"
+                     style="background: url(@camera.ImageUrl) no-repeat center rgb(160, 125, 194); background-blend-mode:color-burn;">
+                    @*<img src="@camera.ImageUrl" alt="" class="col-md-6 col-md-offset-3"/>*@
+                    <div class="carousel-caption" role="option">
+                        <h1>
+                            <a href="/cameras/details/@camera.Id" style="color: white;">
+                                @camera.Make @camera.Model &ndash; now for $@camera.Price
+                            </a>
+                        </h1>
+                    </div>
+                </div>
+
+                active = string.Empty;
+            }
+        }
+    </div>
+    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>

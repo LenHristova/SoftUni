@@ -1,0 +1,111 @@
+﻿@model CameraModel
+
+@{
+    ViewData["Title"] = $"{Model.Make} {Model.Model}";
+
+    CameraAvailability availability;
+    string textType;
+    if (Model.Quantity > 0)
+    {
+        availability = CameraAvailability.InStock;
+        textType = "text-success";
+    }
+    else
+    {
+        availability = CameraAvailability.OutOfStock;
+        textType = "text-danger";
+    }
+}
+
+<h2 class="text-center">@ViewData["Title"] &ndash; <span class="@textType">@availability.GetDisplayName().ToUpper()</span></h2>
+<h3 class="text-center">Price: <b>$</b>@Model.Price.ToString("F2")</h3>
+<h3 class="text-center">Seller: <a href="/users/details/@Model.User.Id">@Model.User.Username</a></h3>
+
+<div class="container col-md-10 col-md-offset-1">
+    <hr />
+    <div class="row">
+        <div class="text-right col-md-6">
+            <img width="300" src="@Model.ImageUrl" alt="@ViewData["Title"]"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="text-right col-md-6">
+            <p><b>Is Full Frame:</b></p>
+        </div>
+        <div class="col-md-6">
+            <p>@(Model.IsFullFrame ? "Yes" : "No")</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="text-right col-md-6">
+            <p><b>Minimum Shutter Speed:</b></p>
+        </div>
+        <div class="col-md-6">
+            <p>@Model.MinShutterSpeed</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="text-right col-md-6">
+            <p><b>Maximum Shutter Speed:</b></p>
+        </div>
+        <div class="col-md-6">
+            <p>@Model.MaxShutterSpeed</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="text-right col-md-6">
+            <p><b>Minimum ISO:</b></p>
+        </div>
+        <div class="col-md-6">
+            <p>@Model.MinIso.GetDisplayName()</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="text-right col-md-6">
+            <p><b>Maximum ISO:</b></p>
+        </div>
+        <div class="col-md-6">
+            <p>@Model.MaxIso</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="text-right col-md-6">
+            <p><b>Video Resolution:</b></p>
+        </div>
+        <div class="col-md-6">
+            <p>@Model.VideoResolution</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="text-right col-md-6">
+            <p><b>Light Metering:</b></p>
+        </div>
+        <div class="col-md-6">
+            @{
+                var lightMeterings = Model.LightMetering.GetFlags().ToArray();
+                if (lightMeterings.Count() > 1)
+                {
+                    <ul>
+                        @foreach (var lm in lightMeterings)
+                        {
+                            <li>@lm.GetDisplayName()</li>
+                        }
+                    </ul>
+                }
+                else if (lightMeterings.Count() == 1)
+                {
+                   <p>@lightMeterings.First().GetDisplayName()</p>
+                }
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="text-right col-md-6">
+            <p><b>Description:</b></p>
+        </div>
+        <div class="col-md-6">
+            <p>@Model.Description</p>
+        </div>
+    </div>
+</div>
+

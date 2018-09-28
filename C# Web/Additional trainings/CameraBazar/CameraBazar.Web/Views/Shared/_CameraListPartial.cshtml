@@ -1,0 +1,40 @@
+﻿@foreach (var camera in Model)
+{
+    <div class="row">
+        <table class="table table-condensed table-responsive table-hover">
+            <tbody>
+                <tr class="table-bordered">
+                    <td class="col-md-3">
+                        <img src="@camera.ImageUrl" alt="Camera @camera.Make @camera.Model" class="img-thumbnail img-rounded" />
+                    </td>
+                    <td class="col-md-6">
+                        <a href="/cameras/details/@camera.Id">
+                            <h3>@camera.Make @camera.Model</h3>
+                        </a>
+                    </td>
+                    <td class="col-md-3 text-right">
+                        @{
+                            CameraAvailability availability;
+                            string textType;
+                            string glyphiconType;
+                            if (camera.Quantity > 0)
+                            {
+                                availability = CameraAvailability.InStock;
+                                textType = "text-success";
+                                glyphiconType = "glyphicon glyphicon-ok";
+                            }
+                            else
+                            {
+                                availability = CameraAvailability.OutOfStock;
+                                textType = "text-danger";
+                                glyphiconType = "glyphicon glyphicon-remove";
+                            }
+                        }
+                        <h3><b>$</b>@camera.Price</h3>
+                        <h5 class="@glyphiconType @textType"> @availability.GetDisplayName().ToUpper()</h5>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}
