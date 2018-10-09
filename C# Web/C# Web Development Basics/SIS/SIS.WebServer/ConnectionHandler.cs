@@ -1,11 +1,15 @@
 ﻿namespace SIS.WebServer
 {
     using HTTP.Common;
+    using HTTP.Cookies;
     using HTTP.Enums;
+    using HTTP.Exceptions;
     using HTTP.Requests;
     using HTTP.Requests.Contracts;
     using HTTP.Responses;
     using HTTP.Responses.Contracts;
+    using HTTP.Sessions;
+    using Results;
     using Routing;
     using System;
     using System.Net.Sockets;
@@ -29,12 +33,28 @@
 
         public async Task ProcessRequestAsync()
         {
-            var httpRequest = await this.ReadRequest();
-
-            if (httpRequest != null)
+            try
             {
-                var httpResponse = this.HandleRequest(httpRequest);
-                await this.PrepareResponse(httpResponse);
+                var httpRequest = await this.ReadRequest();
+
+                if (httpRequest != null)
+                {
+                    var sessionId = this.SetRequestSession(httpRequest);
+
+                    var httpResponse = this.HandleRequest(httpRequest);
+
+                    this.SetResponseSession(httpResponse, sessionId);
+
+                    await this.PrepareResponse(httpResponse);
+                }
+            }
+            catch (BadRequestException e)
+            {
+                await this.PrepareResponse(new TextResult(e.Message, HttpResponseStatusCode.BadRequest));
+            }
+            catch (Exception e)
+            {
+                await this.PrepareResponse(new TextResult(e.Message, HttpResponseStatusCode.InternalServerError));
             }
 
             this.client.Shutdown(SocketShutdown.Both);
@@ -67,6 +87,27 @@
             return result.Length > 0
                 ? new HttpRequest(result.ToString())
                 : null;
+        }
+
+        private string SetRequestSession(IHttpRequest httpRequest)
+        {
+            var sessionCookieKey = httpRequest.Cookies.GetCookie(HttpSessionStorage.SessionCookieKey);
+
+            var sessionId = sessionCookieKey?.Value ?? Guid.NewGuid().ToString();
+
+            httpRequest.Session = HttpSessionStorage.GetSession(sessionId);
+
+            return sessionId;
+        }
+
+        private void SetResponseSession(IHttpResponse httpResponse, string sessionId)
+        {
+            if (sessionId != null)
+            {
+                var sessionCookie = new HttpCookie(HttpSessionStorage.SessionCookieKey, sessionId);
+
+                httpResponse.AddCookie(sessionCookie);
+            }
         }
 
         private IHttpResponse HandleRequest(IHttpRequest httpRequest)

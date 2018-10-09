@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="Buy music in IRunes">
+    <meta name="keywords" content="music, albums, buy">
+    <meta name="author" content="Len">
+    <title>IRunes</title>
+</head>
+<body>
+    <h2>IRunes</h2>
+<ul style="display: {{{notAuthDisplay}}}">
+    <li><a href="/">Home</a></li>
+    <li><a href="/Users/Login">Login</a></li>
+    <li><a href="/Users/Register">Register</a></li>
+</ul>
+<ul style="display: {{{authDisplay}}}">
+    <li><a href="/">Home</a></li>
+    <li><a href="/Albums/All">Albums</a></li>
+    <li><a href="/Users/Logout">Logout</a></li>
+</ul>
+    <hr />
+    {{{content}}}
+    <hr />
+    <footer style="text-align: center">
+        &copy;All Rights Reserved
+    </footer>
+</body>
+</html>

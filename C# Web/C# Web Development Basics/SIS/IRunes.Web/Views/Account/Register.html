@@ -1,0 +1,37 @@
+﻿<h2>Register</h2>
+
+<div>
+    <a href="/">Back to home</a>
+</div>
+<br />
+<hr />
+
+<form method="post" action="/Users/Register">
+    <div>
+        Username:
+        <input type="text" name="username" placeholder="Username" required />
+    </div>
+    <div>
+        Password:
+        <input type="password" name="password" placeholder="Password" required />
+    </div>       
+    <div>
+        Confirm Password:
+        <input type="password" name="confirmPassword" placeholder="Confirm Password" required />
+    </div>
+    <div>
+        Email:
+        <input type="email" name="email" placeholder="Email" required />
+    </div>
+    <div>
+        <input type="submit" value="Register" />
+    </div>
+</form>
+
+<div style="display: {{{showError}}}; color: red">
+    {{{error}}}
+</div>
+
+<div>
+    Already have an account? Login <a href="/Users/Login">here.</a>
+</div>

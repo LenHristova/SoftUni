@@ -13,6 +13,6 @@
         /// <param name="httpResponse"></param>
         /// <returns></returns>
         public static string GetResponseLine(this HttpResponseStatusCode httpResponse)
-            => $"{(int) httpResponse}{httpResponse.GetDisplayName()}";
+            => $"{(int) httpResponse} {httpResponse.GetDisplayName()}";
     }
 }

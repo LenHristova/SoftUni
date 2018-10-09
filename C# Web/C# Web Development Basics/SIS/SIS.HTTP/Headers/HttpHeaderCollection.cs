@@ -20,7 +20,7 @@
             CoreValidator.ThrowIfNullOrEmpty(header.Key, nameof(header.Key));
             CoreValidator.ThrowIfNullOrEmpty(header.Value, nameof(header.Value));
 
-            if (this.headers.ContainsKey(header.Key))
+            if (this.ContainsKey(header.Key))
             {
                 throw new InvalidOperationException(
                     $"HttpHeaderCollection already contains key \"{header.Key}\"");
@@ -29,7 +29,7 @@
             this.headers.Add(header.Key, header);
         }
 
-        public bool Contains(string key)
+        public bool ContainsKey(string key)
         {
             CoreValidator.ThrowIfNull(key, nameof(key));
 
@@ -37,7 +37,9 @@
         }
 
         public HttpHeader GetHeader(string key)
-            => this.Contains(key) ? this.headers[key] : null;
+            => this.ContainsKey(key) 
+                ? this.headers[key] 
+                : null;
 
         public override string ToString() =>
             string.Join(Environment.NewLine, this.headers.Values);

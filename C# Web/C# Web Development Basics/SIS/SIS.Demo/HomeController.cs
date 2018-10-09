@@ -9,6 +9,7 @@
         public IHttpResponse Index()
         {
             //var content = "<h1>Hello, world!</h1>";
+
             var content = "<form method=\"post\">" +
                           "<div><label for=\"name\">Name</label>" +
                           "<input name=\"name\" type=\"text\"/>" +

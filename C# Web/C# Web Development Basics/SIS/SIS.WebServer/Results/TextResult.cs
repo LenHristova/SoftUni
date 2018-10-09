@@ -4,13 +4,14 @@
     using HTTP.Headers;
     using HTTP.Responses;
     using System.Text;
+    using HTTP.Common;
 
     public class TextResult : HttpResponse
     {
         public TextResult(string content, HttpResponseStatusCode statusCode)
         : base(statusCode)
         {
-            this.Headers.Add(new HttpHeader(HttpHeader.ContentType, "text/plain"));
+            this.Headers.Add(new HttpHeader(GlobalConstants.HeaderNames.ContentType, "text/plain; charset=utf-8"));
 
             this.Content = Encoding.UTF8.GetBytes(content);
         }

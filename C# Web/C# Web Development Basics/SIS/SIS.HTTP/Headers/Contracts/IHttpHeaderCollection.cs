@@ -4,7 +4,7 @@
     {
         void Add(HttpHeader header);
 
-        bool Contains(string key);
+        bool ContainsKey(string key);
 
         HttpHeader GetHeader(string key);
     }
