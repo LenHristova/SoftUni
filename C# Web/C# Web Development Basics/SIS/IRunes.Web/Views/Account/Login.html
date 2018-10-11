@@ -1,29 +1,26 @@
-﻿<h2>Login</h2>
+﻿<div class="container col-md-6">
 
-<div>
-    <a href="/">Back to home</a>
-</div>
-<br />
-<hr />
+    <h2 class="text-center">Login</h2>
 
-<form method="post" action="/Users/Login">
-    <div>
-        Username / Email:
-        <input type="text" name="usernameOrEmail" placeholder="Username or Email" required />
+    <hr class="hrBorder mt-1 mb-2" />
+    <div class="alert alert-danger" role="alert" {{{showError}}}>
+        {{{error}}}
     </div>
-    <div>
-        Password:
-        <input type="password" name="password" placeholder="Password" required />
-    </div>
-    <div>
-        <input type="submit" value="Login" />
-    </div>
-</form>
 
-<div style="display: {{{showError}}}; color: red">
-    {{{error}}}
+    <form method="post" action="/Users/Login">
+        <div class="form-group">
+            <label for="UsernameOrEmail">Username / Email:</label>
+            <input class="form-control" type="text" name="UsernameOrEmail" id="UsernameOrEmail" placeholder="Username or Email" required />
+        </div>
+
+        <div class="form-group">
+            <label for="Password">Password:</label>
+            <input class="form-control" type="password" name="Password" id="Password" placeholder="Password" required />
+        </div>
+
+        <div class="form-group text-center">
+            <input class="btn btn-success" type="submit" value="Login" />
+        </div>
+    </form>
 </div>
-    
-<div>
-    Don't have an account? Create one <a href="/Users/Register">here.</a>
-</div>
+

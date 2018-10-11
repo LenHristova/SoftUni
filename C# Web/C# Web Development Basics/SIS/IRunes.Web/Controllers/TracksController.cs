@@ -1,6 +1,7 @@
 ﻿namespace IRunes.Web.Controllers
 {
     using System;
+    using System.Globalization;
     using System.Linq;
     using Services;
     using Services.Contracts;
@@ -81,7 +82,7 @@
 
             this.ViewBag["name"] = track.Name;
             this.ViewBag["videoUrl"] = track.VideoUrl.Split("=").LastOrDefault();
-            this.ViewBag["price"] = track.Price.ToString("F2");
+            this.ViewBag["price"] = track.Price.ToString("F2", CultureInfo.InvariantCulture);
 
             var albumExists = this.albums.Exists(albumId);
             if (!albumExists)

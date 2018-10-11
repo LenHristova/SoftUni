@@ -1,37 +1,32 @@
-﻿<h2>Register</h2>
+﻿<div class="container col-md-6">
 
-<div>
-    <a href="/">Back to home</a>
-</div>
-<br />
-<hr />
+    <h2 class="text-center">Register</h2>
 
-<form method="post" action="/Users/Register">
-    <div>
-        Username:
-        <input type="text" name="username" placeholder="Username" required />
+    <hr class="hrBorder mt-1 mb-2" />
+    <div class="alert alert-danger" role="alert" {{{showError}}}>
+        {{{error}}}
     </div>
-    <div>
-        Password:
-        <input type="password" name="password" placeholder="Password" required />
-    </div>       
-    <div>
-        Confirm Password:
-        <input type="password" name="confirmPassword" placeholder="Confirm Password" required />
-    </div>
-    <div>
-        Email:
-        <input type="email" name="email" placeholder="Email" required />
-    </div>
-    <div>
-        <input type="submit" value="Register" />
-    </div>
-</form>
 
-<div style="display: {{{showError}}}; color: red">
-    {{{error}}}
-</div>
-
-<div>
-    Already have an account? Login <a href="/Users/Login">here.</a>
+    <form method="post" action="/Users/Register">
+        <div class="form-group">
+            <label for="Username">Username:</label>
+            <input class="form-control" type="text" name="Username" id="Username" placeholder="Username" required />
+        </div>
+        <div class="form-group">
+            <label for="Password">Password:</label>
+            <input class="form-control" type="password" name="Password" id="Password" placeholder="Password" required />
+        </div>
+        <div class="form-group">
+            <label for="ConfirmPassword">Confirm Password:</label>
+            <input class="form-control" type="password" name="ConfirmPassword" id="ConfirmPassword" placeholder="Confirm Password" required />
+        </div>
+        <div class="form-group">
+            <label for="Email">Email:</label>
+            <input class="form-control" type="text" name="Email" id="Email" placeholder="Email" required />
+        </div>
+        
+        <div class="form-group text-center">
+            <input class="btn btn-success" type="submit" value="Register" />
+        </div>
+    </form>
 </div>

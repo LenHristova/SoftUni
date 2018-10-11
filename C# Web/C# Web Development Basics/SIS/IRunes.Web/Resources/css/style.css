@@ -1,0 +1,16 @@
+h2 {
+   color: rgb(15, 137, 15);
+}
+
+.bg-base {
+    background-color: rgb(15, 137, 15);
+}
+
+.hrBorder {
+    border-width: 2px;
+    background-color: rgb(15, 137, 15);
+}
+
+.text-orange {
+    color: orange;
+}

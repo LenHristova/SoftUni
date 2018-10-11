@@ -1,9 +1,28 @@
-﻿<div style="display: {{{notAuthDisplay}}}">
+﻿<!--<div class="rounded text-light bg-base pt-5 pb-5 pl-3 pr-3" {{{notAuthDisplay}}}>
     <h1>Welcome to IRunes</h1>
-    <div><a href="/Users/Login">Login</a> if you have an account</div>
-    <div><a href="/Users/Register">Register</a> if you don't</div>
+    <hr class="hrBorder border-light pb-2" />
+    <div><a href="/Users/Login" class="text-warning">Login</a> if you have an account.</div>
+    <div><a href="/Users/Register" class="text-warning">Register</a> if you don't.</div>
 </div>
-<div style="display: {{{authDisplay}}}">
-    <h1>Welcome, {{{user}}}</h1>
-    <h2>IRunes wishes you a fun experience.</h2>
+<div class="rounded text-light bg-base pt-5 pb-5 pl-3 pr-3" {{{authDisplay}}}>
+    <h1>Welcome, <span class="text-warning">{{{user}}}</span></h1>
+    <hr class="hrBorder border-light pb-2" />
+    <h3>IRunes wishes you a fun experience.</h3>
+</div>-->
+
+<div class="jumbotron jumbotron-fluid rounded text-light bg-base" {{{notAuthDisplay}}}>
+    <div class="container">
+        <h1 class="display-2">Welcome to IRunes</h1>
+        <hr class="hrBorder border-light pb-2" />
+        <div><a href="/Users/Login" class="text-orange">Login</a> if you have an account.</div>
+        <div><a href="/Users/Register" class="text-orange">Register</a> if you don't.</div>
+    </div>
+</div>
+
+<div class="jumbotron jumbotron-fluid rounded text-light bg-base" {{{authDisplay}}}>
+    <div class="container">
+        <h1 class="display-2">Welcome, <span class="text-orange">{{{user}}}</span></h1>
+        <hr class="hrBorder border-light pb-2" />
+        <p class="lead">IRunes wishes you a fun experience.</p>
+    </div>
 </div>

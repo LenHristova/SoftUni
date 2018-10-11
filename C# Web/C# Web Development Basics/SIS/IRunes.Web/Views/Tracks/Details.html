@@ -1,12 +1,18 @@
-﻿<div>
-    <a href="/Albums/Details?id={{{albumId}}}">Back to Album</a>
+﻿<div class="container col-md-6">
+
+    <div class="text-center">
+        <h4>Name: {{{name}}}</h4>
+        <h4>Price: ${{{price}}}</h4>
+    </div>
+
+    <hr class="hrBorder mt-1 mb-2" />
+
+        <iframe class="w-100" src="https://www.youtube.com/embed/{{{videoUrl}}}" height="350"
+                frameborder="0" allowfullscreen></iframe>
+
+    <hr class="hrBorder mt-1 mb-2" />
+
+    <div class="text-center">
+        <a class="btn btn-success" href="/Albums/Details?id={{{albumId}}}">Back to Album</a>
+    </div>
 </div>
-<br />
-<hr />
-
-<iframe width="560" height="315" 
-        src="https://www.youtube.com/embed/{{{videoUrl}}}" 
-        frameborder="0" allowfullscreen></iframe>
-
-<h4>Name: {{{name}}}</h4>
-<h4>Price: ${{{price}}}</h4>

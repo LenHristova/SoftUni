@@ -35,7 +35,7 @@
                 albumsResult = string.Join(
                     Environment.NewLine,
                     albumsList
-                        .Select(a => $"<div><a href=\"/Albums/Details?id={a.Id}\">{a.Name}</a></div><br />"));
+                        .Select(a => $"<div><a href=\"/Albums/Details?id={a.Id}\">{a.Name}</a></div>"));
             }
             else
             {
@@ -95,7 +95,10 @@
                 tracksResult = string.Join(
                     Environment.NewLine,
                     album.Tracks
-                        .Select((t, i) => $"<li>{i + 1}. <a href=\"/Tracks/Details?albumId={id}&trackId={t.Id}\">{t.Name}</a></li><br />"));
+                        .Select((t, i) => $"<li>" +
+                                          $"<span class=\"font-weight-bold\">{i + 1}</span>. " +
+                                          $"<a class=\"font-italic\" href=\"/Tracks/Details?albumId={id}&trackId={t.Id}\">{t.Name}</a>" +
+                                          $"</li>"));
             }
             else
             {

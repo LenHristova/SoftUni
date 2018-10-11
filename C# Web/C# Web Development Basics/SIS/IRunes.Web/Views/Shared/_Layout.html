@@ -5,25 +5,50 @@
     <meta name="description" content="Buy music in IRunes">
     <meta name="keywords" content="music, albums, buy">
     <meta name="author" content="Len">
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
     <title>IRunes</title>
 </head>
 <body>
-    <h2>IRunes</h2>
-<ul style="display: {{{notAuthDisplay}}}">
-    <li><a href="/">Home</a></li>
-    <li><a href="/Users/Login">Login</a></li>
-    <li><a href="/Users/Register">Register</a></li>
-</ul>
-<ul style="display: {{{authDisplay}}}">
-    <li><a href="/">Home</a></li>
-    <li><a href="/Albums/All">Albums</a></li>
-    <li><a href="/Users/Logout">Logout</a></li>
-</ul>
-    <hr />
-    {{{content}}}
-    <hr />
-    <footer style="text-align: center">
-        &copy;All Rights Reserved
+    <nav class="navbar navbar-expand-lg navbar-dark bg-base">
+        <a class="navbar-brand" href="/">IRunes</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item" {{{notAuthDisplay}}}>
+                    <a class="nav-link" href="/Users/Login">Login</a>
+                </li>
+                <li class="nav-item" {{{notAuthDisplay}}}>
+                    <a class="nav-link" href="/Users/Register">Register</a>
+                </li>
+                <li class="nav-item" {{{authDisplay}}}>
+                    <a class="nav-link" href="/Albums/All">Albums</a>
+                </li>
+                <li class="nav-item" {{{authDisplay}}}>
+                    <a class="nav-link" href="/Users/Logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <hr class="hrBorder mt-1 mb-2" />
+
+    <main class="p-1">
+        @RenderBody()
+    </main>
+
+    <hr class="hrBorder mt-5 mb-2" />
+    <footer class="text-center">
+        <p>CopyRight &copy; Sanity Design Studios. All rights reserved.</p>
     </footer>
+
+    <script src="jquery-3.3.1.min.js"></script>
+    <script src="popper.min.js"></script>
+    <script src="bootstrap.min.js"></script>
 </body>
 </html>

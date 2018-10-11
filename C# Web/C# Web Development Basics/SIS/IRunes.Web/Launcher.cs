@@ -1,5 +1,6 @@
 ﻿namespace IRunes.Web
 {
+    using System.IO;
     using Controllers;
     using SIS.HTTP.Enums;
     using SIS.WebServer;
@@ -36,10 +37,10 @@
                 .Routes[HttpRequestMethod.Post]["/Users/Register"] = req => new AccountController(req).Register(
                 new RegisterUserViewModel
                 {
-                    Username = req.FormData["username"]?.ToString()?.Trim(),
-                    Password = req.FormData["password"]?.ToString(),
-                    ConfirmPassword = req.FormData["confirmPassword"]?.ToString(),
-                    Email = req.FormData["email"]?.ToString()?.Trim()
+                    Username = req.FormData["Username"]?.ToString()?.Trim(),
+                    Password = req.FormData["Password"]?.ToString(),
+                    ConfirmPassword = req.FormData["ConfirmPassword"]?.ToString(),
+                    Email = req.FormData["Email"]?.ToString()?.Trim()
                 });
 
             serverRoutingTable
@@ -49,8 +50,8 @@
                 .Routes[HttpRequestMethod.Post]["/Users/Login"] = req => new AccountController(req).Login(
                 new LoginUserViewModel
                 {
-                    UsernameOrEmail = req.FormData["usernameOrEmail"]?.ToString()?.Trim(),
-                    Password = req.FormData["password"]?.ToString()
+                    UsernameOrEmail = req.FormData["UsernameOrEmail"]?.ToString()?.Trim(),
+                    Password = req.FormData["Password"]?.ToString()
                 });
 
             serverRoutingTable
@@ -66,8 +67,8 @@
                 .Routes[HttpRequestMethod.Post]["/Albums/Create"] = req => new AlbumsController(req).Create(
                 new CreateAlbumViewModel
                 {
-                    Name = req.FormData["name"]?.ToString()?.Trim(),
-                    CoverImageUrl = req.FormData["coverImageUrl"]?.ToString()?.Trim()
+                    Name = req.FormData["Name"]?.ToString()?.Trim(),
+                    CoverImageUrl = req.FormData["CoverImageUrl"]?.ToString()?.Trim()
                 });
 
             serverRoutingTable
@@ -82,9 +83,9 @@
                 .Routes[HttpRequestMethod.Post]["/Tracks/Create"] = req => new TracksController(req).Create(
                 new CreateTrackViewModel
                 {
-                    Name = req.FormData["name"]?.ToString()?.Trim(),
-                    VideoUrl = req.FormData["videoUrl"]?.ToString()?.Trim(),
-                    Price = decimal.TryParse(req.FormData["price"].ToString(), out var price) ? price : default(decimal)
+                    Name = req.FormData["Name"]?.ToString()?.Trim(),
+                    VideoUrl = req.FormData["VideoUrl"]?.ToString()?.Trim(),
+                    Price = decimal.TryParse(req.FormData["Price"].ToString(), out var price) ? price : default(decimal)
                 },
                 req.QueryData["albumId"]?.ToString());
 

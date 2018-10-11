@@ -12,7 +12,9 @@
     using Results;
     using Routing;
     using System;
+    using System.IO;
     using System.Net.Sockets;
+    using System.Reflection;
     using System.Text;
     using System.Threading.Tasks;
 
@@ -116,13 +118,47 @@
             var requestMethod = httpRequest.Method;
             var requestPath = httpRequest.Path;
 
-            if (!routes.ContainsKey(requestMethod) ||
-                !routes[requestMethod].ContainsKey(requestPath))
+            var isResource = requestPath.Contains(".");
+            if (isResource)
+            {
+                return this.TryGetResource(requestPath);
+            }
+
+            var isRegisteredRoute = routes.ContainsKey(requestMethod) &&
+                                    routes[requestMethod].ContainsKey(requestPath);
+            if (isRegisteredRoute)
+            {
+                return routes[requestMethod][requestPath].Invoke(httpRequest);
+            }
+
+            return new HttpResponse(HttpResponseStatusCode.NotFound);
+        }
+
+        private IHttpResponse TryGetResource(string requestPath)
+        {
+            var appLocation = Assembly.GetExecutingAssembly().Location;
+            var appDirectory = Directory.GetParent(appLocation).Parent?.Parent?.Parent;
+
+            var indexOfPathAndFileSeparator = requestPath.LastIndexOf("/");
+            var file = requestPath.Substring(indexOfPathAndFileSeparator + 1);
+
+            var indexOfFileAndExtensionSeparator = file.LastIndexOf(".");
+            var fileFolder = file.Substring(indexOfFileAndExtensionSeparator + 1);
+
+            var resourcePath = $"{appDirectory}/{GlobalConstants.AppResourceFolderName}/{fileFolder}/{file}";
+
+            var resourceExists = File.Exists(resourcePath);
+
+            if (resourceExists)
+            {
+                var content = File.ReadAllBytes(resourcePath);
+
+                return new InlineResourceResult(content, HttpResponseStatusCode.Ok);
+            }
+            else
             {
                 return new HttpResponse(HttpResponseStatusCode.NotFound);
             }
-
-            return routes[requestMethod][requestPath].Invoke(httpRequest);
         }
 
         private async Task PrepareResponse(IHttpResponse httpResponse)

@@ -1,5 +1,6 @@
 ﻿namespace IRunes.Web.Controllers
 {
+    using System;
     using SIS.HTTP.Enums;
     using SIS.HTTP.Requests.Contracts;
     using SIS.HTTP.Responses.Contracts;
@@ -15,8 +16,9 @@
     {
         private const string HtmlExtension = ".html";
         private const string ViewsPath = "../../../Views";
-        private const string LayoutPath = ViewsPath + "/Shared/_Layout" + HtmlExtension;
-        private const string ContentPlaceholder = "{{{content}}}";
+        private const string SharedFolder = "Shared";
+        private const string LayoutFile = "_Layout";
+        private const string RenderContentCommand = "@RenderBody()";
 
         protected Controller(IHttpRequest httpRequest)
         {
@@ -24,9 +26,9 @@
 
             this.ViewBag = new Dictionary<string, string>
             {
-                ["showError"] = "none",
-                ["authDisplay"] = this.IsAuthenticated ? "block" : "none",
-                ["notAuthDisplay"] = !this.IsAuthenticated ? "block" : "none",
+                ["showError"] = "hidden",
+                ["authDisplay"] = this.IsAuthenticated ? string.Empty : "hidden",
+                ["notAuthDisplay"] = !this.IsAuthenticated ? string.Empty : "hidden",
             };
         }
 
@@ -46,41 +48,41 @@
 
         protected IHttpResponse View([CallerMemberName]string viewName = "")
         {
-            var folderName = this.GetType().Name
-                .Replace(nameof(Controller), "");
+            var layoutPath = $"{ViewsPath}/{SharedFolder}/{LayoutFile}{HtmlExtension}";
+            var layout = string.Empty;
 
+            var folderName = this.GetType().Name.Replace(nameof(Controller), "");
             var viewPath = $"{ViewsPath}/{folderName}/{viewName}{HtmlExtension}";
+            var content = string.Empty;
 
-            if (!File.Exists(LayoutPath))
+            try
             {
-                return this.ServerError($"View {LayoutPath} was not found.");
+                layout = File.ReadAllText(layoutPath);
+                content = File.ReadAllText(viewPath);
+            }
+            catch (FileNotFoundException e)
+            {
+                Console.WriteLine(e.Message);
+                return NotFoundError();
             }
 
-            if (!File.Exists(viewPath))
-            {
-                return this.ServerError($"View {viewPath} was not found.");
-            }
-
-            var layout = File.ReadAllText(LayoutPath);
-            var content = File.ReadAllText(viewPath);
-
-            content = layout.Replace(ContentPlaceholder, content);
+            var htmlContent = layout.Replace(RenderContentCommand, content);
 
             if (this.ViewBag.Any())
             {
                 foreach (var value in this.ViewBag)
                 {
-                    content = content.Replace($"{{{{{{{value.Key}}}}}}}", value.Value);
+                    htmlContent = htmlContent.Replace($"{{{{{{{value.Key}}}}}}}", value.Value);
                 }
             }
 
-            return new HtmlResult(content, HttpResponseStatusCode.Ok);
+            return new HtmlResult(htmlContent, HttpResponseStatusCode.Ok);
         }
 
         protected void AddErrorMessageToViewData(string errorMessage)
         {
             this.ViewBag["error"] = errorMessage;
-            this.ViewBag["showError"] = "block";
+            this.ViewBag["showError"] = string.Empty;
         }
 
         protected IHttpResponse ServerError(string message)
