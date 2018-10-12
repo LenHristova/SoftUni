@@ -1,31 +1,27 @@
 ﻿namespace SIS.WebServer
 {
+    using Api.Contracts;
+    using HTTP.Common;
     using System;
     using System.Net;
     using System.Net.Sockets;
     using System.Threading.Tasks;
-    using HTTP.Common;
-    using Routing;
 
-    public class Server 
+    public class Server
     {
         private const string LocalhostIpAddress = "127.0.0.1";
-
         private readonly int port;
-
         private readonly TcpListener listener;
-
-        private readonly ServerRoutingTable serverRoutingTable;
-
+        private readonly IHttpHandler handle;
         private bool isRunning;
 
-        public Server(int port, ServerRoutingTable serverRoutingTable)
+        public Server(int port, IHttpHandler handle)
         {
-            CoreValidator.ThrowIfNull(serverRoutingTable, nameof(serverRoutingTable));
+            CoreValidator.ThrowIfNull(handle, nameof(handle));
 
             this.port = port;
             this.listener = new TcpListener(IPAddress.Parse(LocalhostIpAddress), port);
-            this.serverRoutingTable = serverRoutingTable;
+            this.handle = handle;
         }
 
         public void Run()
@@ -47,7 +43,7 @@
 
         public async void Listen(Socket client)
         {
-            var connectionHandler = new ConnectionHandler(client, this.serverRoutingTable);
+            var connectionHandler = new ConnectionHandler(client, this.handle);
             await connectionHandler.ProcessRequestAsync();
         }
     }

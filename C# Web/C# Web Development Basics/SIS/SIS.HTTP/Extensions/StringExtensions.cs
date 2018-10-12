@@ -21,7 +21,7 @@
 
             var stringValueToCharArray = stringValue.ToLower().ToCharArray();
             var firstUpperChar = char.ToUpper(stringValueToCharArray.First());
-            var lowerChars = stringValueToCharArray.Skip(1);
+            var lowerChars = string.Join("", stringValueToCharArray.Skip(1));
 
             return  $"{firstUpperChar}{lowerChars}";
         }

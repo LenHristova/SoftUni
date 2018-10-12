@@ -1,20 +1,17 @@
 ﻿namespace SIS.WebServer
 {
+    using Api.Contracts;
     using HTTP.Common;
     using HTTP.Cookies;
     using HTTP.Enums;
     using HTTP.Exceptions;
     using HTTP.Requests;
     using HTTP.Requests.Contracts;
-    using HTTP.Responses;
     using HTTP.Responses.Contracts;
     using HTTP.Sessions;
     using Results;
-    using Routing;
     using System;
-    using System.IO;
     using System.Net.Sockets;
-    using System.Reflection;
     using System.Text;
     using System.Threading.Tasks;
 
@@ -22,15 +19,15 @@
     {
         private readonly Socket client;
 
-        private readonly ServerRoutingTable serverRoutingTable;
+        private readonly IHttpHandler handler;
 
-        public ConnectionHandler(Socket client, ServerRoutingTable serverRoutingTable)
+        public ConnectionHandler(Socket client, IHttpHandler handler)
         {
             CoreValidator.ThrowIfNull(client, nameof(client));
-            CoreValidator.ThrowIfNull(serverRoutingTable, nameof(serverRoutingTable));
+            CoreValidator.ThrowIfNull(handler, nameof(handler));
 
             this.client = client;
-            this.serverRoutingTable = serverRoutingTable;
+            this.handler = handler;
         }
 
         public async Task ProcessRequestAsync()
@@ -43,7 +40,7 @@
                 {
                     var sessionId = this.SetRequestSession(httpRequest);
 
-                    var httpResponse = this.HandleRequest(httpRequest);
+                    var httpResponse = this.handler.Handle(httpRequest);
 
                     this.SetResponseSession(httpResponse, sessionId);
 
@@ -109,55 +106,6 @@
                 var sessionCookie = new HttpCookie(HttpSessionStorage.SessionCookieKey, sessionId);
 
                 httpResponse.AddCookie(sessionCookie);
-            }
-        }
-
-        private IHttpResponse HandleRequest(IHttpRequest httpRequest)
-        {
-            var routes = this.serverRoutingTable.Routes;
-            var requestMethod = httpRequest.Method;
-            var requestPath = httpRequest.Path;
-
-            var isResource = requestPath.Contains(".");
-            if (isResource)
-            {
-                return this.TryGetResource(requestPath);
-            }
-
-            var isRegisteredRoute = routes.ContainsKey(requestMethod) &&
-                                    routes[requestMethod].ContainsKey(requestPath);
-            if (isRegisteredRoute)
-            {
-                return routes[requestMethod][requestPath].Invoke(httpRequest);
-            }
-
-            return new HttpResponse(HttpResponseStatusCode.NotFound);
-        }
-
-        private IHttpResponse TryGetResource(string requestPath)
-        {
-            var appLocation = Assembly.GetExecutingAssembly().Location;
-            var appDirectory = Directory.GetParent(appLocation).Parent?.Parent?.Parent;
-
-            var indexOfPathAndFileSeparator = requestPath.LastIndexOf("/");
-            var file = requestPath.Substring(indexOfPathAndFileSeparator + 1);
-
-            var indexOfFileAndExtensionSeparator = file.LastIndexOf(".");
-            var fileFolder = file.Substring(indexOfFileAndExtensionSeparator + 1);
-
-            var resourcePath = $"{appDirectory}/{GlobalConstants.AppResourceFolderName}/{fileFolder}/{file}";
-
-            var resourceExists = File.Exists(resourcePath);
-
-            if (resourceExists)
-            {
-                var content = File.ReadAllBytes(resourcePath);
-
-                return new InlineResourceResult(content, HttpResponseStatusCode.Ok);
-            }
-            else
-            {
-                return new HttpResponse(HttpResponseStatusCode.NotFound);
             }
         }
 
