@@ -1,0 +1,13 @@
+﻿@model UserListingModel
+
+<tr>
+    <td>@Model.Username</td>
+    <td>@Model.Email</td>
+    <td>
+        <a class="btn btn-default" asp-area="Admin" asp-controller="Users" asp-action="Details" asp-route-id="@Model.Id">Details</a>
+        <a class="btn btn-primary" asp-area="Admin" asp-controller="Users" asp-action="MakeLecturer" asp-route-id="@Model.Id">Make Lecturer</a>
+        <a class="btn btn-warning" asp-area="Admin" asp-controller="Users" asp-action="ChangePassword" asp-route-id="@Model.Id">Change Password</a>
+        <a class="btn btn-danger" asp-area="Admin" asp-controller="Users" asp-action="Ban" asp-route-id="@Model.Id">Ban</a>
+    </td>
+</tr>
+

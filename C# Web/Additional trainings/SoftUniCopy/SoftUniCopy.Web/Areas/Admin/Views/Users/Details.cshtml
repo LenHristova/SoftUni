@@ -1,0 +1,22 @@
+﻿@model UserDetailsModel
+
+@{
+    ViewData["Title"] = $"Details for {Model.Username}";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p><strong>Username:</strong> @Model.Username</p>
+<p><strong>Email:</strong> <a href="mailto://@Model.Email">@Model.Email</a></p>
+<p><strong>Full name:</strong> @(Model.FullName ?? "n/a")</p>
+<p><strong>Roles:</strong></p>
+<ul>
+    <li>Student</li>
+    @if (Model.Roles.Any())
+    {
+        foreach (var role in Model.Roles)
+        {
+            <li>@role</li>
+        }
+    }
+</ul>
