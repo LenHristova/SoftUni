@@ -1,0 +1,35 @@
+﻿@model List<Chushka.Common.Models.Orders.AllOrdersViewModel>
+@{
+    ViewData["Title"] = "Create Product";
+}
+
+<div class="mt-3 mb-5">
+    <h1 class="text-center">All Orders</h1>
+    <hr class="hr-2 bg-dark" />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Product</th>
+                <th>Ordered On</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for(var i = 0; i < Model.Count(); i++)
+            {
+                var bgColor = i % 2 == 0 ? "chushka-bg-color" : string.Empty;
+                var order = Model[i];
+
+                <tr class="@bgColor">
+                    <td>@(i + 1)</td>
+                    <td>@order.Id</td>
+                    <td>@order.ClientUserName</td>
+                    <td>@order.ProductName</td>
+                    <td>@order.FormattedOrderedOn</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

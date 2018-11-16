@@ -1,0 +1,20 @@
+@model ICollection<ICollection<Chushka.Common.Models.Products.IndexProductViewModel>>
+
+@foreach (var row in Model)
+{
+    <div class="row d-flex justify-content-around">
+
+        @foreach (var product in row)
+        {
+            <div class="product px-2 py-0  m-1 chushka-bg-color rounded-top rounded-bottom col-md-2">
+                <a asp-area="" asp-controller="Products" asp-action="Details" asp-route-id="@product.Id">
+                    <h5 class="text-center mt-3">@product.Name</h5>
+                    <hr class="hr-1 bg-white" />
+                    <p class="text-white text-center">@product.SubstringedDescription</p>
+                    <hr class="hr-1 bg-white" />
+                    <h6 class="text-center text-white mb-3">$@product.Price</h6>
+                </a>
+            </div>
+        }
+    </div>
+}

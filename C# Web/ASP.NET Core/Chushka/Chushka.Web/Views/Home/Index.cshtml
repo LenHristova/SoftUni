@@ -1,0 +1,40 @@
+﻿@model Chushka.Common.Models.Home.IndexViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@inject SignInManager<User> SignInManager
+
+@if (!SignInManager.IsSignedIn(User))
+{
+    <div class="jumbotron mt-3 chushka-bg-color">
+        <h1>Welcome to Chushka Universal Web Shop</h1>
+        <hr class="bg-white" />
+        <h3><a asp-area="Identity" asp-page="/Account/Login" class="nav-link-dark">Login</a> if you have an account.</h3>
+        <h3><a asp-area="Identity" asp-page="/Account/Register" class="nav-link-dark">Register</a> if you don't.</h3>
+    </div>
+}
+else
+{
+    var greeting = User.IsInRole("Admin") 
+        ? "Enjoy your work today!" 
+        : "Feel free to view and order any of our products.";
+
+    <div class="mt-3 mb-5">
+        <div class="container-fluid text-center">
+            <h2>Greetings, @Model.LoggedInUserFullName!</h2>
+            <h4>@greeting</h4>
+        </div>
+        <hr class="hr-2 bg-dark" />
+        <div class="container-fluid product-holder">
+            @if (Model.RowsProducts.Any())
+            {
+                <partial name="_IndexProductsPartial" model="@Model.RowsProducts" />
+            }
+            else
+            {
+                <h3>No products...</h3>
+            }
+        </div>
+    </div>
+}

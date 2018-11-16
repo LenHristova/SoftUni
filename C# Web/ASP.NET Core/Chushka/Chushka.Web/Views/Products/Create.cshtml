@@ -1,0 +1,53 @@
+﻿@model Chushka.Common.Models.Products.CreateProductInputModel
+
+@{
+    ViewData["Title"] = "Create Product";
+}
+
+<div class="mt-3">
+    <h1 class="text-center">@ViewData["Title"]</h1>
+    <hr class="hr-2 bg-dark" />
+    <form asp-controller="Products" asp-action="Create" method="post" class="mx-auto half-width">
+        <div class="form-group">
+            <label asp-for="Name">Name</label>
+            <input asp-for="Name" class="form-control" placeholder="Name..." required>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Price">Price</label>
+            <input asp-for="Price" step="0.01" min="0" class="form-control" placeholder="Price..." required>
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description">Description</label>
+            <textarea asp-for="Description" class="form-control" placeholder="Description..." required></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <h5 class="text-center">Product Type</h5>
+        <hr class="hr-2 bg-dark half-width" />
+        <div class="mt-4 d-flex justify-content-around ">
+            @foreach (var typeName in Enum.GetNames(Model.Type.GetType()))
+            {
+                if (Model.Type.ToString() == typeName)
+                {
+                    <div class="form-check form-check-inline">
+                        <input asp-for="Type" class="form-check-input" type="radio" value="@typeName" checked>
+                        <label asp-for="Type" class="form-check-label">@typeName</label>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-check form-check-inline">
+                        <input asp-for="Type" class="form-check-input" type="radio" value="@typeName">
+                        <label asp-for="Type" class="form-check-label">@typeName</label>
+                    </div>
+                }
+            }
+        </div>
+        <hr class="hr-2 bg-dark half-width" />
+        <div class="button-holder d-flex justify-content-center">
+            <button type="submit" class="btn chushka-bg-color">Create</button>
+        </div>
+    </form>
+</div>
