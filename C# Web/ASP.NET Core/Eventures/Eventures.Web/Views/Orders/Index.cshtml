@@ -1,0 +1,36 @@
+﻿@model List<Eventures.Common.Models.Orders.UserOrderListViewModel>
+
+@{
+    ViewData["Title"] = "My Events";
+}
+
+<h1 class="text-center pt-3">@ViewData["Title"]</h1>
+<hr class="eventures-bg-color hr-2" />
+
+<table class="table">
+    <thead>
+        <tr class="text-strong">
+            <th scope="col" class="border-top-0">#</th>
+            <th scope="col" class="border-top-0">Name</th>
+            <th scope="col" class="border-top-0">Start</th>
+            <th scope="col" class="border-top-0">End</th>
+            <th scope="col" class="border-top-0">Tickets</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            var currentEvent = Model[i];
+
+            <tr>
+                <th scope="row">@(i + 1)</th>
+                <td>@currentEvent.Name</td>
+                <td>@currentEvent.Start</td>
+                <td>@currentEvent.End</td>
+                <td>@currentEvent.TicketsCount</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<hr class="eventures-bg-color hr-2" />

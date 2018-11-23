@@ -1,0 +1,33 @@
+﻿@model IList<Eventures.Common.Models.Orders.AllOrderListViewModel>
+
+@{
+    ViewData["Title"] = "All Events";
+}
+
+<h1 class="text-center pt-3">@ViewData["Title"]</h1>
+<hr class="eventures-bg-color hr-2" />
+
+<table class="table">
+    <thead>
+        <tr class="text-strong">
+            <th scope="col" class="border-top-0">#</th>
+            <th scope="col" class="border-top-0">Event</th>
+            <th scope="col" class="border-top-0">Customer</th>
+            <th scope="col" class="border-top-0">Ordered On</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            var order = Model[i];
+
+            <tr>
+                <th scope="row">@(i + 1)</th>
+                <td>@order.Event</td>
+                <td>@order.Customer</td>
+                <td>@order.OrderedOn</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<hr class="eventures-bg-color hr-2" />
