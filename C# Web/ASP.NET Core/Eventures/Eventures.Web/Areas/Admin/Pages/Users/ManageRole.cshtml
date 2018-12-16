@@ -1,0 +1,65 @@
+﻿@page
+@model ManageRoleModel
+
+@{
+    ViewData["Title"] = "All Users";
+    var roles = this.ViewData["Roles"] as IEnumerable<string>;
+}
+
+<h1 class="text-center pt-3">@ViewData["Title"]</h1>
+<hr class="eventures-bg-color hr-2" />
+<table class="table">
+    <thead>
+        <tr class="text-strong">
+            <th scope="col" class="border-top-0">Username</th>
+            <th scope="col" class="border-top-0">Role</th>
+            <th scope="col" class="border-top-0 text-center">Choose user's role</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var user in Model.UsersListWrapper.Users)
+        {
+            var userId = user.Id;
+            var currentRole = user.Role;
+            string newRole = null;
+            var userRoleTextColor = currentRole == "Admin" ? "warning" : "secondary";
+            <tr>
+                <td>@user.Username</td>
+                <td class="text-@userRoleTextColor">@user.Role</td>
+                <td class="text-center">
+                    <form method="post" id="@userId">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <input asp-for="@userId" hidden />
+                        <input asp-for="@currentRole" hidden />
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                            @foreach (var role in roles)
+                            {
+                                if (user.Role == role)
+                                {
+                                    <label asp-for="@newRole" class="btn btn-dark active">
+                                        <input asp-for="@newRole" type="radio" value="@role" onchange="myFunction('@userId')" checked> @role
+                                    </label>
+                                }
+                                else
+                                {
+                                    <label asp-for="@newRole" class="btn btn-outline-secondary">
+                                        <input asp-for="@newRole" type="radio" value="@role" onchange="myFunction('@userId')"> @role
+                                    </label>
+                                }
+                            }
+                        </div>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<hr class="eventures-bg-color hr-2" />
+
+<script>
+    function myFunction(formId) {
+        document.getElementById(formId).submit();
+    }
+</script>

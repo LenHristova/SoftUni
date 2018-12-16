@@ -1,0 +1,62 @@
+﻿@model Eventures.Common.Models.Events.EventListOnPageViewModel
+
+@{
+    ViewData["Title"] = "All Events";
+    var orderedTickets = 0;
+}
+
+<h1 class="text-center pt-3">@ViewData["Title"]</h1>
+<hr class="eventures-bg-color hr-2" />
+
+@if (!Model.Events.Any())
+{
+    <h3 class="text-center pt-3">There is no available events...</h3>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr class="text-strong">
+                <th scope="col" class="border-top-0">#</th>
+                <th scope="col" class="border-top-0">Name</th>
+                <th scope="col" class="border-top-0">Start</th>
+                <th scope="col" class="border-top-0">End</th>
+                <th scope="col" class="border-top-0">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var currentEvent in Model.Events)
+            {
+                <tr>
+                    <th scope="row">@currentEvent.Number</th>
+                    <td>@currentEvent.Name</td>
+                    <td>@currentEvent.StartToString</td>
+                    <td>@currentEvent.EndToString</td>
+                    <td>
+                        <form asp-controller="Orders" asp-action="Finalize" method="post" asp-route-id="@currentEvent.Id">
+                            <div class="row form-group mb-0">
+                                <label class="text-strong col">Tickets</label>
+                                <div class="col">
+                                    <input asp-for="@orderedTickets" />
+                                    <small class="d-block text-success">Available: @currentEvent.TotalTickets</small>
+                                </div>
+                                <div class="col">
+                                    <button type="submit" class="btn eventures-bg-color text-dark">Order</button>
+                                </div>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <hr class="eventures-bg-color hr-2" />
+
+    @Html.PagedListPager(
+        (IPagedList)Model.Events,
+        page => Url.Action("Index", new { page }),
+        PagedListRenderOptionsBase.OnlyShowFivePagesAtATime)
+}
+
+<hr class="eventures-bg-color hr-2" />
