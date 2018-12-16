@@ -1,7 +1,7 @@
 ﻿namespace Eventures.Web.Utilities
 {
-    using Data;
-    using Data.Models;
+    using Eventures.Data;
+    using Eventures.Data.Models;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
@@ -10,7 +10,7 @@
 
     public static class ApplicationBuilderExtensions
     {
-        private static readonly string[] RoleNames = {"Admin", "User"};
+        private static readonly string[] RoleNames = { "Admin", "User" };
 
         public static async void SeedDatabaseAsync(this IApplicationBuilder app)
         {

@@ -23,7 +23,7 @@
 
         public IEnumerable<TModel> All<TModel>()
             => this.db.Events
-                //.Where(e => e.End >= DateTime.UtcNow && e.TotalTickets > 0)
+                .Where(e => e.End >= DateTime.UtcNow && e.TotalTickets > 0)
                 .OrderBy(e => e.Start)
                 .ProjectTo<TModel>(mapper.ConfigurationProvider)
                 .ToList();
@@ -40,22 +40,33 @@
 
         public Event GetLastAdded() => this.db.Events.LastOrDefault();
 
-        public bool Exists(int id) => this.db.Events.Any(e => e.Id == id);
+        public bool IsAvailable(int id)
+            => this.db.Events
+                .Any(e => e.Id == id &&
+                          e.End >= DateTime.UtcNow &&
+                          e.TotalTickets > 0);
 
-        public int GetTicketsCount(int id)
-        => this.db.Events.Single(e => e.Id == id).TotalTickets;
+        public int? GetTicketsCount(int id)
+        => this.db.Events.FirstOrDefault(e => e.Id == id)?.TotalTickets;
 
-        public bool GetTickets(int id, int ticketsCount)
+        public bool BuyTickets(int eventId, int orderedTickets)
         {
-            var @event = this.db.Events.Find(id);
-
-            if (@event == null || @event.TotalTickets < ticketsCount)
+            if (orderedTickets <= 0)
             {
                 return false;
             }
 
-            @event.TotalTickets -= ticketsCount;
+            var @event = this.db.Events.Find(eventId);
+
+            if (@event == null || @event.TotalTickets < orderedTickets)
+            {
+                return false;
+            }
+
+            @event.TotalTickets -= orderedTickets;
             return true;
         }
+
+        public int GetCount() => this.db.Events.Count();
     }
 }

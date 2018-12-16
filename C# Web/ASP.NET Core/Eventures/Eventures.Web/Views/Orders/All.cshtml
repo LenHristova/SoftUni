@@ -1,33 +1,46 @@
-﻿@model IList<Eventures.Common.Models.Orders.AllOrderListViewModel>
+﻿@model Eventures.Common.Models.Orders.AllOrderListOnPageViewModel
 
 @{
-    ViewData["Title"] = "All Events";
+    ViewData["Title"] = "All Orders";
 }
 
 <h1 class="text-center pt-3">@ViewData["Title"]</h1>
 <hr class="eventures-bg-color hr-2" />
 
-<table class="table">
-    <thead>
-        <tr class="text-strong">
-            <th scope="col" class="border-top-0">#</th>
-            <th scope="col" class="border-top-0">Event</th>
-            <th scope="col" class="border-top-0">Customer</th>
-            <th scope="col" class="border-top-0">Ordered On</th>
-        </tr>
-    </thead>
-    <tbody>
-        @for (int i = 0; i < Model.Count; i++)
-        {
-            var order = Model[i];
-
-            <tr>
-                <th scope="row">@(i + 1)</th>
-                <td>@order.Event</td>
-                <td>@order.Customer</td>
-                <td>@order.OrderedOn</td>
+@if (!Model.Orders.Any())
+{
+    <h3 class="text-center pt-3">There is no orders to show yet...</h3>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr class="text-strong">
+                <th scope="col" class="border-top-0">#</th>
+                <th scope="col" class="border-top-0">Event</th>
+                <th scope="col" class="border-top-0">Customer</th>
+                <th scope="col" class="border-top-0">Ordered On</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var order in Model.Orders)
+            {
+                <tr>
+                    <th scope="row">@order.Number</th>
+                    <td>@order.Event</td>
+                    <td>@order.Customer</td>
+                    <td>@order.OrderedOn</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <hr class="eventures-bg-color hr-2" />
+
+    @Html.PagedListPager(
+        (IPagedList)Model.Orders,
+        page => Url.Action("All", new { page }),
+        PagedListRenderOptionsBase.OnlyShowFivePagesAtATime)
+}
+
 <hr class="eventures-bg-color hr-2" />

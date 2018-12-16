@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.Data", "Eventures
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.Common", "Eventures.Common\Eventures.Common.csproj", "{4E525190-C051-4F7B-98F9-58CB30C5BBC8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventures.Services", "Eventures.Services\Eventures.Services.csproj", "{009A71C9-AE9D-4B35-B140-0D97ECE4F268}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventures.Services", "Eventures.Services\Eventures.Services.csproj", "{009A71C9-AE9D-4B35-B140-0D97ECE4F268}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventures.Services.Tests", "Eventures.Services.Tests\Eventures.Services.Tests.csproj", "{6900A63F-B72C-41C2-95D8-8D68E72AD38A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{009A71C9-AE9D-4B35-B140-0D97ECE4F268}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{009A71C9-AE9D-4B35-B140-0D97ECE4F268}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{009A71C9-AE9D-4B35-B140-0D97ECE4F268}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6900A63F-B72C-41C2-95D8-8D68E72AD38A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6900A63F-B72C-41C2-95D8-8D68E72AD38A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6900A63F-B72C-41C2-95D8-8D68E72AD38A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6900A63F-B72C-41C2-95D8-8D68E72AD38A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

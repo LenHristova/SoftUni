@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Eventures.Data.Models;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
-
-namespace Eventures.Web.Areas.Identity.Pages.Account
+﻿namespace Eventures.Web.Areas.Identity.Pages.Account
 {
+    using Eventures.Data.Models;
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
+    using Microsoft.Extensions.Logging;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Linq;
+    using System.Threading.Tasks;
+
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
@@ -48,14 +47,20 @@ namespace Eventures.Web.Areas.Identity.Pages.Account
             public bool RememberMe { get; set; }
         }
 
-        public void OnGetAsync(string returnUrl = null)
+        public async Task OnGetAsync(string returnUrl = null)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
             }
 
-            ReturnUrl = returnUrl ?? Url.Content("~/");
+            returnUrl = returnUrl ?? Url.Content("~/");
+
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
+            ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            ReturnUrl = returnUrl;
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -65,9 +70,9 @@ namespace Eventures.Web.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var result = await signInManager.PasswordSignInAsync(
-                    Input.Username, 
-                    Input.Password, 
-                    Input.RememberMe, 
+                    Input.Username,
+                    Input.Password,
+                    Input.RememberMe,
                     lockoutOnFailure: false);
 
                 if (result.Succeeded)

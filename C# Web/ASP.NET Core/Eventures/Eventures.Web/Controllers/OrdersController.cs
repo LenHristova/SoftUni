@@ -1,112 +1,105 @@
 ﻿namespace Eventures.Web.Controllers
 {
-    using System.Linq;
-    using Common.Models.Events;
     using Common.Models.Orders;
-    using Data.Models;
+    using Eventures.Data.Models;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Services.Contracts;
+    using System.Linq;
+    using Common.Constants;
 
     public class OrdersController : Controller
     {
         private readonly IOrderService orderService;
         private readonly UserManager<User> userManager;
         private readonly IEventService eventService;
+        private readonly IPaginationService paginationService;
 
-        public OrdersController(IOrderService orderService, 
-            UserManager<User> userManager, 
-            IEventService eventService)
+        public OrdersController(
+            IOrderService orderService,
+            UserManager<User> userManager,
+            IEventService eventService,
+            IPaginationService paginationService)
         {
             this.orderService = orderService;
             this.userManager = userManager;
             this.eventService = eventService;
+            this.paginationService = paginationService;
         }
 
         [Authorize]
-        public IActionResult Index()
+        public IActionResult Index(int? page)
         {
             var userId = this.userManager.GetUserId(this.User);
 
-            var events = this.orderService.AllByUser<UserOrderListViewModel>(userId).ToList();
+            var orderedEvents = this.orderService.AllByUser<UserOrderListViewModel>(userId).ToList();
 
-            return View(events);
+            var pageNumber = this.paginationService.ValidatePage(page, orderedEvents.Count);
+            var eventsInPage = this.paginationService.Paginate(pageNumber, orderedEvents);
+
+            var firstEventNumberOnPage = (pageNumber - 1) * GlobalConstants.OrdersCountOnPage + 1;
+
+            for (int i = 0; i < eventsInPage.Count; i++)
+            {
+                eventsInPage[i].Number = firstEventNumberOnPage + i;
+            }
+
+            return View(new UserOrderListOnPageViewModel { Events = eventsInPage });
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult All()
+        public IActionResult All(int? page)
         {
-            return View(this.orderService.All<AllOrderListViewModel>().ToList());
+            var orders = this.orderService.All<AllOrderListViewModel>().ToList();
+
+            var pageNumber = this.paginationService.ValidatePage(page, orders.Count);
+            var ordersInPage = this.paginationService.Paginate(pageNumber, orders);
+
+            var firstOrderNumberOnPage = (pageNumber - 1) * GlobalConstants.OrdersCountOnPage + 1;
+
+            for (int i = 0; i < ordersInPage.Count; i++)
+            {
+                ordersInPage[i].Number = firstOrderNumberOnPage + i;
+            }
+
+            return View(new AllOrderListOnPageViewModel { Orders = ordersInPage });
         }
 
         [Authorize]
         [HttpPost]
         public IActionResult Finalize(int id, int orderedTickets)
         {
-            var eventExists = this.eventService.Exists(id);
+            var eventExists = this.eventService.IsAvailable(id);
 
             if (!eventExists)
             {
-                return RedirectToAction("All", "Events");
+                this.TempData["Error"] = "The event that you're trying to order tickets for, doesn't exist or orders are not available.";
+                return RedirectToAction("Index", "Events");
             }
 
-            if (orderedTickets < 0)
+            if (orderedTickets <= 0)
             {
                 this.TempData["Error"] = "Ordered tickets must be positive number.";
-                return RedirectToAction("All", "Events");
+                return RedirectToAction("Index", "Events");
             }
 
             var availableTickets = this.eventService.GetTicketsCount(id);
 
-            if (availableTickets < orderedTickets)
+            if (!availableTickets.HasValue || availableTickets < orderedTickets)
             {
                 this.TempData["Error"] = $"Not enough tickets for that event. Available tickets: {availableTickets}";
-                return RedirectToAction("All", "Events");
+                return RedirectToAction("Index", "Events");
             }
 
             var userId = this.userManager.GetUserId(this.User);
-
-            this.orderService.Create(id, userId, orderedTickets);
+            var success = this.eventService.BuyTickets(id, orderedTickets);
+            if (success)
+            {
+                this.orderService.Create(id, userId, orderedTickets);
+            }
 
             return RedirectToAction("Index");
         }
-
-        //[Authorize]
-        //[HttpPost]
-        //public IActionResult Finalize(EventListWrapperViewModel model)
-        //var @event = model.EventListViewModels.SingleOrDefault(e => e.Tickets > 0);
-        //if (@event == null)
-        //{
-        //    ModelState.AddModelError(string.Empty, "Ordered tickets must be positive number.");
-        //    //this.TempData["Error"] = "Ordered tickets must be positive number.";
-        //    //return RedirectToAction("All", "Events");
-        //}
-
-        //var eventExists = this.eventService.Exists(@event.Id);
-
-        //if (!eventExists)
-        //{
-        //    return RedirectToAction("All", "Events");
-        //}
-
-        //var tickets = this.eventService.GetTicketsCount(@event.Id);
-
-        //if (tickets < @event.Tickets)
-        //{
-        //    this.TempData["Error"] = "Not enough tickets for this event.";
-        //    return RedirectToAction("All", "Events");
-        //}
-
-        //if (!ModelState.IsValid)
-        //{
-
-        //}
-        //var userId = this.userManager.GetUserId(this.User);
-
-        //this.orderService.Create(@event.Id, userId, @event.Tickets);
-
-        //    return RedirectToAction("Index");
-        //}
     }
 }

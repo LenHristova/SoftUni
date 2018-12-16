@@ -10,28 +10,24 @@
     {
         public EventuresProfile()
         {
-            CreateMap<Event, EventListViewModel>()
-                .ForMember(dest => dest.StartToString,
-                    m => m.MapFrom(src => src.Start.ToLocalTime().ToString("dd-MMM-yy hh:mm:ss", CultureInfo.InvariantCulture)))
-                .ForMember(dest => dest.EndToString,
-                    m => m.MapFrom(src => src.End.ToLocalTime().ToString("dd-MMM-yy hh:mm:ss", CultureInfo.InvariantCulture)));
+            CreateMap<Event, EventListViewModel>();
 
             CreateMap<Order, UserOrderListViewModel>()
-                .ForMember(dest => dest.Name, m => m.MapFrom(src => src.Event.Name))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Event.Name))
                 .ForMember(dest => dest.Start,
-                    m => m.MapFrom(src => src.Event.Start.ToLocalTime().ToString("dd-MMM-yy hh:mm:ss", CultureInfo.InvariantCulture)))
+                    opt => opt.MapFrom(src => src.Event.Start.ToLocalTime().ToString("dd-MMM-yy hh:mm:ss", CultureInfo.InvariantCulture)))
                 .ForMember(dest => dest.End,
-                    m => m.MapFrom(src => src.Event.End.ToLocalTime().ToString("dd-MMM-yy hh:mm:ss", CultureInfo.InvariantCulture)));
+                    opt => opt.MapFrom(src => src.Event.End.ToLocalTime().ToString("dd-MMM-yy hh:mm:ss", CultureInfo.InvariantCulture)));
 
             CreateMap<Order, AllOrderListViewModel>()
-                .ForMember(dest => dest.Event, m => m.MapFrom(src => src.Event.Name))
-                .ForMember(dest => dest.Customer, m => m.MapFrom(src => src.Customer.UserName))
+                .ForMember(dest => dest.Event, opt => opt.MapFrom(src => src.Event.Name))
+                .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.Customer.UserName))
                 .ForMember(dest => dest.OrderedOn,
-                    m => m.MapFrom(src => src.OrderedOn.ToLocalTime().ToString("dd-MMM-yy hh:mm:ss", CultureInfo.InvariantCulture)));
+                    opt => opt.MapFrom(src => src.OrderedOn.ToLocalTime().ToString("dd-MMM-yy hh:mm:ss", CultureInfo.InvariantCulture)));
 
             CreateMap<CreateEventInputModel, Event>()
-                .ForMember(dest => dest.Start, m => m.MapFrom(src => src.Start.ToUniversalTime()))
-                .ForMember(dest => dest.End, m => m.MapFrom(src => src.End.ToUniversalTime()));
+                .ForMember(dest => dest.Start, opt => opt.MapFrom(src => src.Start.ToUniversalTime()))
+                .ForMember(dest => dest.End, opt => opt.MapFrom(src => src.End.ToUniversalTime()));
         }
     }
 }

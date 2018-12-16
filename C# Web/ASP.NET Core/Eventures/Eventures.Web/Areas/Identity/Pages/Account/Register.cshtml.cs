@@ -1,7 +1,7 @@
 ﻿namespace Eventures.Web.Areas.Identity.Pages.Account
 {
     using Common.Constants;
-    using Data.Models;
+    using Eventures.Data.Models;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -107,7 +107,10 @@
                 {
                     logger.LogInformation("User created a new account with password.");
 
+                    await this.userManager.AddToRoleAsync(user, "User");
+
                     await signInManager.SignInAsync(user, isPersistent: false);
+
                     return LocalRedirect(returnUrl);
                 }
 
@@ -121,7 +124,7 @@
                     {
                         ModelState.AddModelError(string.Empty, error.Description);
                     }
-                    
+
                 }
             }
 

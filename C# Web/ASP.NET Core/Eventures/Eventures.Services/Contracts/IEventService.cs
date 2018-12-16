@@ -12,10 +12,12 @@
 
         Event GetLastAdded();
 
-        bool Exists(int id);
+        bool IsAvailable(int id);
 
-        int GetTicketsCount(int id);
+        int? GetTicketsCount(int id);
 
-        bool GetTickets(int id, int ticketsCount);
+        bool BuyTickets(int eventId, int orderedTickets);
+
+        int GetCount();
     }
 }

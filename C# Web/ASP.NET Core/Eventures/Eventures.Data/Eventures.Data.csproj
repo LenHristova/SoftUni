@@ -9,6 +9,7 @@
     <Compile Remove="Migrations\20181118172528_AddLogsTable.cs" />
     <Compile Remove="Migrations\20181118201340_AddCreatorColumnToEventTable.cs" />
     <Compile Remove="Migrations\20181120223045_ChangeEventIdType.cs" />
+    <Compile Remove="Migrations\20181120224531_AddTables.cs" />
     <Compile Remove="Migrations\20181122124732_AddOrderTable.cs" />
     <Compile Remove="Migrations\20181122124912_AddOrderTable.cs" />
     <Compile Remove="Migrations\20181122135210_OrdersTable.cs" />

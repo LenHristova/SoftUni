@@ -1,8 +1,8 @@
 ﻿namespace Eventures.Web
 {
     using AutoMapper;
-    using Data;
-    using Data.Models;
+    using Eventures.Data;
+    using Eventures.Data.Models;
     using Logging;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -55,10 +55,18 @@
                 options.Password.RequiredUniqueChars = 0;
             });
 
+            services.AddAuthentication()
+                .AddFacebook(options =>
+                {
+                    options.AppId = this.Configuration.GetSection("ExternalAuthentication:Facebook:AppId").Value;
+                    options.AppSecret = this.Configuration.GetSection("ExternalAuthentication:Facebook:AppSecret").Value;
+                });
+
             services.AddAutoMapper();
 
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IPaginationService, PaginationService>();
             services.AddScoped<ILogService, LogService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -92,6 +100,11 @@
 
             app.UseMvc(routes =>
             {
+                routes.MapRoute(
+                    name: "areas",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");

@@ -1,6 +1,6 @@
 ﻿namespace Eventures.Web.Logging
 {
-    using Data.Models;
+    using Eventures.Data.Models;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;

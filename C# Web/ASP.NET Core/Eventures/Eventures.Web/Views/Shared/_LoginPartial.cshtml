@@ -12,7 +12,7 @@
                     <span class="nav-text">Events</span>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" asp-area="" asp-controller="Events" asp-action="All">All Events</a>
+                    <a class="dropdown-item" asp-area="" asp-controller="Events" asp-action="Index">All Events</a>
                     <a class="dropdown-item" asp-area="" asp-controller="Orders" asp-action="Index">My Events</a>
                     @if (User.IsInRole("Admin"))
                     {
@@ -24,21 +24,24 @@
     </ul>
 
     @if (User.IsInRole("Admin"))
-     {
-         <ul class="navbar-nav">
-             <li class="nav-item">
-                 <div class="dropdown">
-                     <button class="eventures-bg-color border-0 dropdown-toggle nav-link nav-text" type="button"
-                             id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                         <span class="nav-text">Orders</span>
-                     </button>
-                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                         <a class="dropdown-item" asp-area="" asp-controller="Orders" asp-action="All">All Orders</a>
-                     </div>
-                 </div>
-             </li>
-         </ul>
-     }
+    {
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <div class="dropdown">
+                    <button class="eventures-bg-color border-0 dropdown-toggle nav-link nav-text" type="button"
+                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="nav-text">Orders</span>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" asp-area="" asp-controller="Orders" asp-action="All">All Orders</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <ul class="navbar-nav">
+            <li class="nav-item"><a asp-area="Admin" asp-page="/Users/ManageRole" class="nav-link nav-text">Users</a></li>
+        </ul>
+    }
 
     <ul class="nav navbar-nav ml-auto">
         <li>
